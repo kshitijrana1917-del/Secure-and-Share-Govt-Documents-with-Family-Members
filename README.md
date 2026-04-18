@@ -73,6 +73,4 @@ To view the project on your mobile device while it's running on your computer:
     ```
 4.  Configure Nginx as a reverse proxy to forward traffic to port 3000.
 
----
 
-*Built with security and design excellence by [Your Name].*
