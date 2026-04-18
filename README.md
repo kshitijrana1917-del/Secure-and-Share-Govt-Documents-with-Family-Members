@@ -52,6 +52,13 @@ To view the project on your mobile device while it's running on your computer:
     ```bash
     npm start
     ```
+   ## 📦 Node Modules (Pre-built)
+
+For viewers who want to skip the installation process or see the exact dependencies used during development, you can download the complete `node_modules` folder from the link below:
+
+- **[Download node_modules (Google Drive)]https://drive.google.com/drive/folders/1HJR42-nrQa4EVwhAQK219Nu9cTwe9jzL?usp=sharing**
+
+*Note: It is generally recommended to use `npm install` for fresh installations.*
 
 ## ☁️ Deployment Guide
 
