@@ -1,0 +1,140 @@
+const express = require('express');
+const router = express.Router();
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+const { requireAadhaar } = require('../middleware/auth');
+const { db, logAction } = require('../database');
+
+// Ensure uploads directory exists
+const uploadDir = path.join(__dirname, '..', 'uploads');
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+// Setup Multer for file uploads
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, uploadDir);
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, req.user.id + '-' + uniqueSuffix + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ 
+    storage: storage,
+    limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
+    fileFilter: (req, file, cb) => {
+        // Accept images and PDFs
+        if (file.mimetype.startsWith('image/') || file.mimetype === 'application/pdf') {
+            cb(null, true);
+        } else {
+            cb(new Error('Only images and PDF files are allowed!'), false);
+        }
+    }
+});
+
+// POST /api/documents/upload
+router.post('/upload', requireAadhaar, upload.single('document'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ error: 'No file uploaded or invalid file type.' });
+    }
+
+    const { filename, originalname, mimetype, size } = req.file;
+
+    db.run(
+        `INSERT INTO documents (user_id, filename, original_name, mimetype, size) VALUES (?, ?, ?, ?, ?)`,
+        [req.user.id, filename, originalname, mimetype, size],
+        function(err) {
+            if (err) {
+                // If DB fails, delete the uploaded file
+                fs.unlinkSync(path.join(uploadDir, filename));
+                return res.status(500).json({ error: 'Database error while saving document metadata.' });
+            }
+            
+            logAction(req.user.id, 'UPLOAD', `Uploaded document: ${originalname}`);
+            res.json({ message: 'Document uploaded successfully', documentId: this.lastID });
+        }
+    );
+});
+
+// GET /api/documents
+router.get('/', requireAadhaar, (req, res) => {
+    const query = `
+        SELECT d.id, d.filename, d.original_name, d.mimetype, d.size, d.uploaded_at, GROUP_CONCAT(s.shared_with_email) as shared_with
+        FROM documents d
+        LEFT JOIN shares s ON d.id = s.document_id
+        WHERE d.user_id = ?
+        GROUP BY d.id
+        ORDER BY d.uploaded_at DESC
+    `;
+    db.all(query, [req.user.id], (err, rows) => {
+        if (err) return res.status(500).json({ error: 'Error fetching documents' });
+        
+        // Convert the string of comma-separated emails to an array
+        const documents = rows.map(row => ({
+            ...row,
+            shared_with: row.shared_with ? row.shared_with.split(',') : []
+        }));
+        
+        res.json({ documents });
+    });
+});
+
+// GET /api/documents/:id/download
+router.get('/:id/download', requireAadhaar, (req, res) => {
+    const docId = req.params.id;
+
+    // Verify ownership or share access
+    db.get(`SELECT * FROM documents WHERE id = ?`, [docId], (err, doc) => {
+        if (err || !doc) return res.status(404).json({ error: 'Document not found' });
+
+        const serveFile = () => {
+            const filePath = path.join(uploadDir, doc.filename);
+            if (fs.existsSync(filePath)) {
+                logAction(req.user.id, 'DOWNLOAD', `Downloaded document: ${doc.original_name}`);
+                res.download(filePath, doc.original_name);
+            } else {
+                res.status(404).json({ error: 'File missing on server' });
+            }
+        };
+
+        if (doc.user_id === req.user.id) {
+            serveFile();
+        } else {
+            // Check if it's shared with the user
+            db.get(`SELECT * FROM shares WHERE document_id = ? AND shared_with_email = ?`, [docId, req.user.email], (err, share) => {
+                if (err || !share) return res.status(403).json({ error: 'Access denied' });
+                serveFile();
+            });
+        }
+    });
+});
+
+// DELETE /api/documents/:id
+router.delete('/:id', requireAadhaar, (req, res) => {
+    const docId = req.params.id;
+
+    db.get(`SELECT * FROM documents WHERE id = ? AND user_id = ?`, [docId, req.user.id], (err, doc) => {
+        if (err || !doc) return res.status(404).json({ error: 'Document not found or unauthorized' });
+
+        // Delete from DB first
+        db.run(`DELETE FROM documents WHERE id = ?`, [docId], (err) => {
+            if (err) return res.status(500).json({ error: 'Database error' });
+
+            // Delete associated shares
+            db.run(`DELETE FROM shares WHERE document_id = ?`, [docId]);
+
+            // Delete file from disk
+            const filePath = path.join(uploadDir, doc.filename);
+            if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+
+            logAction(req.user.id, 'DELETE', `Deleted document: ${doc.original_name}`);
+            res.json({ message: 'Document deleted successfully' });
+        });
+    });
+});
+
+module.exports = router;
