@@ -39,24 +39,31 @@ const upload = multer({
 
 // POST /api/documents/upload
 router.post('/upload', requireAadhaar, upload.single('document'), (req, res) => {
+    console.time('upload-total');
     if (!req.file) {
         return res.status(400).json({ error: 'No file uploaded or invalid file type.' });
     }
 
     const { filename, originalname, mimetype, size, path: filePath } = req.file;
+    console.log(`Upload started: ${originalname}, size: ${size} bytes`);
 
     // Generate encryption key and IV
-    const encryptionKey = crypto.scryptSync(process.env.JWT_SECRET || 'super-secret-key-for-dev', req.user.id.toString(), 32);
+    console.time('key-derivation');
+    const encryptionKey = crypto.pbkdf2Sync(process.env.JWT_SECRET || 'super-secret-key-for-dev', req.user.id.toString(), 10000, 32, 'sha256');
     const iv = crypto.randomBytes(16);
+    console.timeEnd('key-derivation');
 
     // Calculate hash of original file
+    console.time('hash-calculation');
     const hash = crypto.createHash('sha256');
     const input = fs.createReadStream(filePath);
     input.on('data', (chunk) => hash.update(chunk));
     input.on('end', () => {
         const fileHash = hash.digest('hex');
+        console.timeEnd('hash-calculation');
 
         // Now encrypt using streams
+        console.time('encryption');
         const cipher = crypto.createCipheriv('aes-256-cbc', encryptionKey, iv);
         const encryptedPath = filePath + '.enc';
         const output = fs.createWriteStream(encryptedPath);
@@ -64,24 +71,30 @@ router.post('/upload', requireAadhaar, upload.single('document'), (req, res) => 
         const encryptStream = fs.createReadStream(filePath).pipe(cipher).pipe(output);
 
         encryptStream.on('finish', () => {
+            console.timeEnd('encryption');
+            console.time('file-rename');
             // Replace original with encrypted
             fs.rename(encryptedPath, filePath, (err) => {
+                console.timeEnd('file-rename');
                 if (err) {
                     fs.unlinkSync(filePath);
                     fs.unlinkSync(encryptedPath);
                     return res.status(500).json({ error: 'Error saving encrypted file.' });
                 }
 
+                console.time('db-insert');
                 // Store in DB
                 db.run(
                     `INSERT INTO documents (user_id, filename, original_name, mimetype, size, encryption_iv, file_hash) VALUES (?, ?, ?, ?, ?, ?, ?)`,
                     [req.user.id, filename, originalname, mimetype, size, iv.toString('hex'), fileHash],
                     function(err) {
+                        console.timeEnd('db-insert');
                         if (err) {
                             fs.unlinkSync(filePath);
                             return res.status(500).json({ error: 'Database error while saving document metadata.' });
                         }
                         
+                        console.timeEnd('upload-total');
                         logAction(req.user.id, 'UPLOAD', `Uploaded, encrypted, and hashed document: ${originalname}`);
                         res.json({ message: 'Document uploaded, encrypted, and secured successfully', documentId: this.lastID });
                     }
@@ -90,12 +103,14 @@ router.post('/upload', requireAadhaar, upload.single('document'), (req, res) => 
         });
 
         encryptStream.on('error', (err) => {
+            console.error('Encryption error:', err);
             fs.unlinkSync(filePath);
             res.status(500).json({ error: 'Encryption failed.' });
         });
     });
 
     input.on('error', (err) => {
+        console.error('Hash calculation error:', err);
         fs.unlinkSync(filePath);
         res.status(500).json({ error: 'Error reading uploaded file.' });
     });
@@ -136,7 +151,7 @@ router.get('/:id/download', requireAadhaar, (req, res) => {
             const filePath = path.join(uploadDir, doc.filename);
             if (fs.existsSync(filePath)) {
                 // Derive key
-                const encryptionKey = crypto.scryptSync(process.env.JWT_SECRET || 'super-secret-key-for-dev', doc.user_id.toString(), 32);
+                const encryptionKey = crypto.pbkdf2Sync(process.env.JWT_SECRET || 'super-secret-key-for-dev', doc.user_id.toString(), 10000, 32, 'sha256');
                 const iv = Buffer.from(doc.encryption_iv, 'hex');
 
                 // Decrypt using streams
