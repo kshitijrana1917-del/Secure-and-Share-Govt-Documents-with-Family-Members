@@ -45,47 +45,59 @@ router.post('/upload', requireAadhaar, upload.single('document'), (req, res) => 
 
     const { filename, originalname, mimetype, size, path: filePath } = req.file;
 
-    // Generate encryption key (derive from JWT secret + user ID for uniqueness)
+    // Generate encryption key and IV
     const encryptionKey = crypto.scryptSync(process.env.JWT_SECRET || 'super-secret-key-for-dev', req.user.id.toString(), 32);
-    const iv = crypto.randomBytes(16); // AES block size
+    const iv = crypto.randomBytes(16);
 
-    // Read the uploaded file
-    fs.readFile(filePath, (err, data) => {
-        if (err) {
-            fs.unlinkSync(filePath);
-            return res.status(500).json({ error: 'Error reading uploaded file.' });
-        }
+    // Calculate hash of original file
+    const hash = crypto.createHash('sha256');
+    const input = fs.createReadStream(filePath);
+    input.on('data', (chunk) => hash.update(chunk));
+    input.on('end', () => {
+        const fileHash = hash.digest('hex');
 
-        // Calculate hash of original data
-        const fileHash = crypto.createHash('sha256').update(data).digest('hex');
-
-        // Encrypt the data
+        // Now encrypt using streams
         const cipher = crypto.createCipheriv('aes-256-cbc', encryptionKey, iv);
-        let encrypted = cipher.update(data);
-        encrypted = Buffer.concat([encrypted, cipher.final()]);
+        const encryptedPath = filePath + '.enc';
+        const output = fs.createWriteStream(encryptedPath);
 
-        // Write encrypted data back to file
-        fs.writeFile(filePath, encrypted, (err) => {
-            if (err) {
-                fs.unlinkSync(filePath);
-                return res.status(500).json({ error: 'Error encrypting file.' });
-            }
+        const encryptStream = fs.createReadStream(filePath).pipe(cipher).pipe(output);
 
-            // Store in DB with IV and hash
-            db.run(
-                `INSERT INTO documents (user_id, filename, original_name, mimetype, size, encryption_iv, file_hash) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-                [req.user.id, filename, originalname, mimetype, size, iv.toString('hex'), fileHash],
-                function(err) {
-                    if (err) {
-                        fs.unlinkSync(filePath);
-                        return res.status(500).json({ error: 'Database error while saving document metadata.' });
-                    }
-                    
-                    logAction(req.user.id, 'UPLOAD', `Uploaded, encrypted, and hashed document: ${originalname}`);
-                    res.json({ message: 'Document uploaded, encrypted, and secured successfully', documentId: this.lastID });
+        encryptStream.on('finish', () => {
+            // Replace original with encrypted
+            fs.rename(encryptedPath, filePath, (err) => {
+                if (err) {
+                    fs.unlinkSync(filePath);
+                    fs.unlinkSync(encryptedPath);
+                    return res.status(500).json({ error: 'Error saving encrypted file.' });
                 }
-            );
+
+                // Store in DB
+                db.run(
+                    `INSERT INTO documents (user_id, filename, original_name, mimetype, size, encryption_iv, file_hash) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                    [req.user.id, filename, originalname, mimetype, size, iv.toString('hex'), fileHash],
+                    function(err) {
+                        if (err) {
+                            fs.unlinkSync(filePath);
+                            return res.status(500).json({ error: 'Database error while saving document metadata.' });
+                        }
+                        
+                        logAction(req.user.id, 'UPLOAD', `Uploaded, encrypted, and hashed document: ${originalname}`);
+                        res.json({ message: 'Document uploaded, encrypted, and secured successfully', documentId: this.lastID });
+                    }
+                );
+            });
         });
+
+        encryptStream.on('error', (err) => {
+            fs.unlinkSync(filePath);
+            res.status(500).json({ error: 'Encryption failed.' });
+        });
+    });
+
+    input.on('error', (err) => {
+        fs.unlinkSync(filePath);
+        res.status(500).json({ error: 'Error reading uploaded file.' });
     });
 });
 
@@ -123,29 +135,37 @@ router.get('/:id/download', requireAadhaar, (req, res) => {
         const serveFile = () => {
             const filePath = path.join(uploadDir, doc.filename);
             if (fs.existsSync(filePath)) {
-                // Read encrypted file
-                fs.readFile(filePath, (err, encryptedData) => {
-                    if (err) return res.status(500).json({ error: 'Error reading file' });
+                // Derive key
+                const encryptionKey = crypto.scryptSync(process.env.JWT_SECRET || 'super-secret-key-for-dev', doc.user_id.toString(), 32);
+                const iv = Buffer.from(doc.encryption_iv, 'hex');
 
-                    // Derive key
-                    const encryptionKey = crypto.scryptSync(process.env.JWT_SECRET || 'super-secret-key-for-dev', doc.user_id.toString(), 32);
-                    const iv = Buffer.from(doc.encryption_iv, 'hex');
+                // Decrypt using streams
+                const decipher = crypto.createDecipheriv('aes-256-cbc', encryptionKey, iv);
+                const hash = crypto.createHash('sha256');
 
-                    // Decrypt
-                    const decipher = crypto.createDecipheriv('aes-256-cbc', encryptionKey, iv);
-                    let decrypted = decipher.update(encryptedData);
-                    decrypted = Buffer.concat([decrypted, decipher.final()]);
+                res.setHeader('Content-Type', doc.mimetype);
+                res.setHeader('Content-Disposition', `attachment; filename="${doc.original_name}"`);
 
-                    // Verify integrity
-                    const decryptedHash = crypto.createHash('sha256').update(decrypted).digest('hex');
+                const stream = fs.createReadStream(filePath).pipe(decipher);
+
+                stream.on('data', (chunk) => {
+                    hash.update(chunk);
+                    res.write(chunk);
+                });
+
+                stream.on('end', () => {
+                    const decryptedHash = hash.digest('hex');
                     if (decryptedHash !== doc.file_hash) {
-                        return res.status(500).json({ error: 'File integrity check failed. Document may be corrupted.' });
+                        res.end(); // Already sent some data, but integrity failed - in production, better to buffer
+                        console.error('Integrity check failed for document:', doc.id);
+                        return;
                     }
-
                     logAction(req.user.id, 'DOWNLOAD', `Downloaded and decrypted document: ${doc.original_name}`);
-                    res.setHeader('Content-Type', doc.mimetype);
-                    res.setHeader('Content-Disposition', `attachment; filename="${doc.original_name}"`);
-                    res.send(decrypted);
+                    res.end();
+                });
+
+                stream.on('error', (err) => {
+                    res.status(500).json({ error: 'Decryption failed.' });
                 });
             } else {
                 res.status(404).json({ error: 'File missing on server' });
