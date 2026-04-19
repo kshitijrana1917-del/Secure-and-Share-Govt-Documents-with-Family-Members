@@ -3,6 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
 const { requireAadhaar } = require('../middleware/auth');
 const { db, logAction } = require('../database');
 
@@ -42,22 +43,50 @@ router.post('/upload', requireAadhaar, upload.single('document'), (req, res) => 
         return res.status(400).json({ error: 'No file uploaded or invalid file type.' });
     }
 
-    const { filename, originalname, mimetype, size } = req.file;
+    const { filename, originalname, mimetype, size, path: filePath } = req.file;
 
-    db.run(
-        `INSERT INTO documents (user_id, filename, original_name, mimetype, size) VALUES (?, ?, ?, ?, ?)`,
-        [req.user.id, filename, originalname, mimetype, size],
-        function(err) {
-            if (err) {
-                // If DB fails, delete the uploaded file
-                fs.unlinkSync(path.join(uploadDir, filename));
-                return res.status(500).json({ error: 'Database error while saving document metadata.' });
-            }
-            
-            logAction(req.user.id, 'UPLOAD', `Uploaded document: ${originalname}`);
-            res.json({ message: 'Document uploaded successfully', documentId: this.lastID });
+    // Generate encryption key (derive from JWT secret + user ID for uniqueness)
+    const encryptionKey = crypto.scryptSync(process.env.JWT_SECRET || 'super-secret-key-for-dev', req.user.id.toString(), 32);
+    const iv = crypto.randomBytes(16); // AES block size
+
+    // Read the uploaded file
+    fs.readFile(filePath, (err, data) => {
+        if (err) {
+            fs.unlinkSync(filePath);
+            return res.status(500).json({ error: 'Error reading uploaded file.' });
         }
-    );
+
+        // Calculate hash of original data
+        const fileHash = crypto.createHash('sha256').update(data).digest('hex');
+
+        // Encrypt the data
+        const cipher = crypto.createCipheriv('aes-256-cbc', encryptionKey, iv);
+        let encrypted = cipher.update(data);
+        encrypted = Buffer.concat([encrypted, cipher.final()]);
+
+        // Write encrypted data back to file
+        fs.writeFile(filePath, encrypted, (err) => {
+            if (err) {
+                fs.unlinkSync(filePath);
+                return res.status(500).json({ error: 'Error encrypting file.' });
+            }
+
+            // Store in DB with IV and hash
+            db.run(
+                `INSERT INTO documents (user_id, filename, original_name, mimetype, size, encryption_iv, file_hash) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                [req.user.id, filename, originalname, mimetype, size, iv.toString('hex'), fileHash],
+                function(err) {
+                    if (err) {
+                        fs.unlinkSync(filePath);
+                        return res.status(500).json({ error: 'Database error while saving document metadata.' });
+                    }
+                    
+                    logAction(req.user.id, 'UPLOAD', `Uploaded, encrypted, and hashed document: ${originalname}`);
+                    res.json({ message: 'Document uploaded, encrypted, and secured successfully', documentId: this.lastID });
+                }
+            );
+        });
+    });
 });
 
 // GET /api/documents
@@ -94,8 +123,30 @@ router.get('/:id/download', requireAadhaar, (req, res) => {
         const serveFile = () => {
             const filePath = path.join(uploadDir, doc.filename);
             if (fs.existsSync(filePath)) {
-                logAction(req.user.id, 'DOWNLOAD', `Downloaded document: ${doc.original_name}`);
-                res.download(filePath, doc.original_name);
+                // Read encrypted file
+                fs.readFile(filePath, (err, encryptedData) => {
+                    if (err) return res.status(500).json({ error: 'Error reading file' });
+
+                    // Derive key
+                    const encryptionKey = crypto.scryptSync(process.env.JWT_SECRET || 'super-secret-key-for-dev', doc.user_id.toString(), 32);
+                    const iv = Buffer.from(doc.encryption_iv, 'hex');
+
+                    // Decrypt
+                    const decipher = crypto.createDecipheriv('aes-256-cbc', encryptionKey, iv);
+                    let decrypted = decipher.update(encryptedData);
+                    decrypted = Buffer.concat([decrypted, decipher.final()]);
+
+                    // Verify integrity
+                    const decryptedHash = crypto.createHash('sha256').update(decrypted).digest('hex');
+                    if (decryptedHash !== doc.file_hash) {
+                        return res.status(500).json({ error: 'File integrity check failed. Document may be corrupted.' });
+                    }
+
+                    logAction(req.user.id, 'DOWNLOAD', `Downloaded and decrypted document: ${doc.original_name}`);
+                    res.setHeader('Content-Type', doc.mimetype);
+                    res.setHeader('Content-Disposition', `attachment; filename="${doc.original_name}"`);
+                    res.send(decrypted);
+                });
             } else {
                 res.status(404).json({ error: 'File missing on server' });
             }

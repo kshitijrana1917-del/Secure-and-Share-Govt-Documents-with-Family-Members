@@ -52,6 +52,8 @@ const initializeDB = () => {
                 mimetype TEXT NOT NULL,
                 size INTEGER NOT NULL,
                 uploaded_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                encryption_iv TEXT,
+                file_hash TEXT,
                 FOREIGN KEY (user_id) REFERENCES users(id)
             )
         `);
