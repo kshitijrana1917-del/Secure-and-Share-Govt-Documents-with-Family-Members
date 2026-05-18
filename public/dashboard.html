@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GovSecure | Enterprise Vault Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="/js/theme.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .app-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Sidebar Modern 2.0 */
+        .sidebar {
+            background: rgba(3, 3, 5, 0.4);
+            backdrop-filter: blur(50px);
+            -webkit-backdrop-filter: blur(50px);
+            border-right: 1px solid var(--border-subtle);
+            padding: 40px 24px;
+            display: flex;
+            flex-direction: column;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            z-index: 100;
+            box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 48px;
+            padding: 0 8px;
+        }
+
+        .logo-box {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #fff, #a1a1aa);
+            color: #000;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 0 20px rgba(255,255,255,0.1);
+        }
+
+        .nav-section {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 20px;
+            border-radius: var(--radius-lg);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: var(--transition-smooth);
+            cursor: pointer;
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; height: 100%; width: 3px;
+            background: var(--clr-primary);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+            transform-origin: center;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--clr-primary);
+            border-color: rgba(99, 102, 241, 0.2);
+        }
+
+        .nav-item.active::before {
+            transform: scaleY(1);
+        }
+
+        .nav-item i {
+            font-size: 1.1rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Main Workspace */
+        .workspace {
+            padding: 48px 64px;
+            max-width: 1600px;
+            width: 100%;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .workspace-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 56px;
+        }
+
+        .header-title h1 {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+        }
+
+        .header-title p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 8px 8px 8px 24px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            transition: var(--transition-bounce);
+            backdrop-filter: blur(20px);
+        }
+
+        .user-profile:hover {
+            border-color: var(--border-vibrant);
+            background: rgba(255,255,255,0.05);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--clr-primary), var(--clr-accent));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            box-shadow: 0 0 15px var(--clr-primary-glow);
+        }
+
+        /* Bento Grid Stats */
+        .bento-stats {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+            margin-bottom: 56px;
+        }
+
+        .stat-card {
+            grid-column: span 3;
+            padding: 32px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: -50px; right: -50px; width: 150px; height: 150px;
+            background: radial-gradient(circle, var(--clr-primary-glow), transparent 70%);
+            opacity: 0.5;
+            transition: all 0.5s ease;
+        }
+
+        .stat-card:hover::after {
+            transform: scale(1.5);
+        }
+
+        .stat-card .label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 16px;
+            display: block;
+            z-index: 2;
+        }
+
+        .stat-card .value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            font-family: 'Geist Mono', monospace;
+            color: var(--text-primary);
+            z-index: 2;
+        }
+
+        /* Document Grid */
+        .doc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .doc-card {
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .doc-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .doc-icon-wrap {
+            width: 56px;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-vibrant);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--clr-primary);
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .doc-meta h4 {
+            font-size: 1.1rem;
+            margin-bottom: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 220px;
+        }
+
+        .action-row {
+            display: flex;
+            gap: 12px;
+            margin-top: auto;
+        }
+
+        /* Modal Overlays */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 24px;
+        }
+
+        .modal-card {
+            width: 100%;
+            max-width: 480px;
+            background: rgba(16, 16, 24, 0.8);
+            border: 1px solid var(--border-vibrant);
+            border-top: 1px solid rgba(255,255,255,0.2);
+            border-radius: var(--radius-2xl);
+            padding: 48px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+        }
+
+        @media (max-width: 1024px) {
+            .app-layout { grid-template-columns: 1fr; }
+            .sidebar { display: none; }
+            .workspace { padding: 32px 24px 120px; }
+            .bento-stats .stat-card { grid-column: span 6; }
+            .bottom-nav {
+                position: fixed;
+                bottom: 24px; left: 24px; right: 24px;
+                background: rgba(3, 3, 5, 0.8);
+                backdrop-filter: blur(30px);
+                display: flex;
+                justify-content: space-around;
+                padding: 16px;
+                border: 1px solid var(--border-subtle);
+                border-radius: var(--radius-full);
+                z-index: 1000;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            }
+            .bottom-nav .nav-item { padding: 12px; border-radius: 50%; }
+            .bottom-nav .nav-item span { display: none; }
+            .bottom-nav .nav-item.active::before { display: none; }
+        }
+
+        @media (max-width: 640px) {
+            .workspace-header { flex-direction: column; align-items: flex-start; gap: 24px; }
+            .bento-stats { grid-template-columns: 1fr; }
+            .stat-card { grid-column: span 1; }
+            .doc-grid { grid-template-columns: 1fr; }
+        }
+        
+        /* Toast Modern */
+        .toast {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            padding: 16px 24px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-vibrant);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+            z-index: 2000;
+            transition: var(--transition-bounce);
+            transform: translateY(150%);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        .toast.show { transform: translateY(0); }
+    </style>
+</head>
+<body class="page-transition fade-out">
+    <div class="bg-visuals">
+        <div class="mesh-gradient"></div>
+        <div class="noise-overlay"></div>
+        <div class="blob" style="top: -10%; left: -20%;"></div>
+        <div class="blob" style="bottom: -10%; right: -20%; background: var(--clr-accent); animation-delay: -3s;"></div>
+    </div>
+
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="logo-box"><i class="fa-solid fa-shield-halved"></i></div>
+                <h2 style="font-size: 1.4rem;">GovSecure</h2>
+            </div>
+
+            <nav class="nav-section">
+                <div class="nav-item active" onclick="switchTab('my-docs', this)">
+                    <i class="fa-solid fa-grid-2"></i> <span>Secure Vault</span>
+                </div>
+                <div class="nav-item" onclick="switchTab('activity-logs', this)">
+                    <i class="fa-solid fa-clock-rotate-left"></i> <span>Audit Trail</span>
+                </div>
+                <div class="nav-item" onclick="switchTab('profile', this)">
+                    <i class="fa-solid fa-fingerprint"></i> <span>Identity & Security</span>
+                </div>
+                <div id="nav-admin" class="nav-item" onclick="switchTab('admin-dashboard', this)" style="display: none; border-top: 1px solid var(--border-subtle); margin-top: 16px; padding-top: 24px;">
+                    <i class="fa-solid fa-shield-virus" style="color: var(--error);"></i> <span style="color: var(--error);">Admin Portal</span>
+                </div>
+            </nav>
+
+            <div class="nav-item" onclick="logout()" style="color: var(--error); margin-top: auto; border-top: 1px solid var(--border-subtle); padding-top: 24px;">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> <span>Terminate Session</span>
+            </div>
+
+            <div class="nav-item" onclick="toggleTheme()" style="margin-top: 16px; border: 1px solid var(--border-subtle); border-radius: var(--radius-full); justify-content: center;">
+                <i class="fa-solid fa-circle-half-stroke"></i> <span id="themeText">Toggle Theme</span>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="workspace">
+            <header class="workspace-header animate-slide-up">
+                <div class="header-title">
+                    <h1 id="greeting">Welcome Back</h1>
+                    <div style="display: flex; align-items: center; gap: 32px; margin-top: 12px;">
+                        <p style="margin: 0;">Enterprise-grade security command center.</p>
+                        <div class="search-wrap" style="position: relative; width: 340px;">
+                            <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                            <input type="text" id="searchInput" class="input-modern" placeholder="Search encrypted vault..." oninput="handleFilters()" style="padding: 14px 20px 14px 48px; border-radius: var(--radius-full);">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="user-profile">
+                    <div style="display: flex; flex-direction: column; align-items: flex-end;">
+                        <span id="userNameDisplay" style="font-weight: 600; font-size: 0.95rem;">Citizen</span>
+                        <span style="font-size: 0.75rem; color: var(--success); display: flex; align-items: center; gap: 4px;"><i class="fa-solid fa-circle" style="font-size: 0.4rem;"></i> Authenticated</span>
+                    </div>
+                    <div class="avatar" id="avatarInitial">U</div>
+                </div>
+            </header>
+
+            <!-- Workspace View -->
+            <div id="my-docs" class="tab-view animate-slide-up" style="animation-delay: 0.1s;">
+                <!-- Summary Stats -->
+                <div class="bento-stats">
+                    <div class="glass-card spotlight-card stat-card" style="grid-column: span 3;">
+                        <span class="label">Total Vault Files</span>
+                        <div class="value" id="totalCount">0</div>
+                    </div>
+                    <div class="glass-card spotlight-card stat-card" style="grid-column: span 3;">
+                        <span class="label">Delegated Access</span>
+                        <div class="value" id="sharedOutCount">0</div>
+                    </div>
+                    <!-- Chart Card taking up the remaining space -->
+                    <div class="glass-card spotlight-card stat-card" style="grid-column: span 6; display: flex; flex-direction: row; align-items: center; justify-content: space-between; padding: 20px;">
+                        <div>
+                            <span class="label">Vault Activity</span>
+                            <div class="value" id="sharedInCount" style="font-size: 1.5rem; margin-top: 8px; color: var(--clr-primary);">Live Sync</div>
+                        </div>
+                        <div style="height: 120px; width: 100%; max-width: 250px; position: relative;">
+                            <canvas id="activityChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
+                    <h3 style="font-size: 1.5rem;">Encrypted Storage</h3>
+                    <button class="btn-modern btn-modern-primary" onclick="openModal('uploadModal')">
+                        <i class="fa-solid fa-plus"></i> Secure Upload
+                    </button>
+                </div>
+
+                <div id="docsContainer" class="doc-grid">
+                    <!-- Skeleton Loaders -->
+                    <div class="skeleton glass-card" style="height: 220px;"></div>
+                    <div class="skeleton glass-card" style="height: 220px;"></div>
+                    <div class="skeleton glass-card" style="height: 220px;"></div>
+                </div>
+
+                <!-- Empty State -->
+                <div id="emptyState" style="display: none; padding: 100px 40px; text-align: center;">
+                    <div style="position: relative; width: 140px; height: 140px; margin: 0 auto 32px;">
+                        <div style="position: absolute; inset: 0; background: var(--clr-primary-glow); border-radius: 50%; filter: blur(30px);"></div>
+                        <i class="fa-solid fa-vault" style="font-size: 5rem; color: var(--clr-primary); position: relative; z-index: 1; margin-top: 30px;"></i>
+                    </div>
+                    <h2 style="margin-bottom: 16px; font-size: 2rem;">Your Vault is Empty</h2>
+                    <p style="color: var(--text-secondary); margin: 0 auto 40px; max-width: 480px; font-size: 1.1rem;">Begin by uploading sensitive documents. All files are encrypted client-side with AES-256-GCM before storage.</p>
+                    <button class="btn-modern btn-modern-primary" onclick="openModal('uploadModal')">
+                        <i class="fa-solid fa-shield-halved"></i> Initialize Storage
+                    </button>
+                </div>
+            </div>
+
+            <!-- Activity View -->
+            <div id="activity-logs" class="tab-view animate-slide-up" style="display: none;">
+                <h2 style="margin-bottom: 40px; font-size: 2rem;">Cryptographic Audit Trail</h2>
+                <div class="glass-card" style="padding: 0; overflow: hidden;">
+                    <div id="logsContainer"></div>
+                </div>
+            </div>
+
+            <!-- Security View -->
+            <div id="profile" class="tab-view animate-slide-up" style="display: none;">
+                <h2 style="margin-bottom: 12px; font-size: 2rem;">Security Engine</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 40px; font-size: 1.1rem;">Manage your cryptographic identity and active sessions.</p>
+                
+                <div class="bento-grid">
+                    <!-- Identity Card -->
+                    <div class="glass-card stat-card" style="grid-column: span 8;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 32px;">
+                            <h4 style="font-size: 1.2rem;">Identity Verification</h4>
+                            <span class="badge badge-success"><i class="fa-solid fa-check-double"></i> Verified</span>
+                        </div>
+                        
+                        <div style="display: flex; gap: 40px; align-items: center; background: rgba(0,0,0,0.2); padding: 40px; border-radius: var(--radius-xl); border: 1px solid var(--border-subtle);">
+                            <div style="position: relative;">
+                                <div style="width: 90px; height: 90px; border-radius: 24px; background: var(--success); color: white; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; box-shadow: 0 0 40px rgba(52, 211, 153, 0.3);">
+                                    <i class="fa-solid fa-id-card-clip"></i>
+                                </div>
+                                <div style="position: absolute; bottom: -8px; right: -8px; width: 32px; height: 32px; background: #fff; color: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; border: 4px solid var(--bg-base);">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <div style="font-size: 1.5rem; font-weight: 700; margin-bottom: 8px;">Aadhaar Integration Active</div>
+                                <div style="color: var(--text-muted); font-size: 1rem; font-family: 'Geist Mono', monospace;" id="aadhaarDisplay">Ending in ••••</div>
+                                <div style="margin-top: 24px; font-size: 0.85rem; color: var(--text-secondary); display: flex; gap: 24px;">
+                                    <span style="display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-shield-check" style="color: var(--success);"></i> UIDAI Linked</span>
+                                    <span style="display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-microchip" style="color: var(--success);"></i> HSM Protected</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Session Card -->
+                    <div class="glass-card stat-card" style="grid-column: span 4;">
+                        <h4 style="margin-bottom: 32px; font-size: 1.2rem;">Current Session</h4>
+                        <div style="background: rgba(0,0,0,0.2); padding: 32px; border-radius: var(--radius-xl); border: 1px solid var(--border-subtle); margin-bottom: auto;">
+                            <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.05em;">Device Identity</div>
+                            <div style="font-weight: 700; font-size: 1.1rem; display: flex; align-items: center; gap: 12px;">
+                                <i class="fa-solid fa-desktop" style="color: var(--clr-primary);"></i> Secure Web Client
+                            </div>
+                            <div style="font-size: 0.85rem; color: var(--success); margin-top: 16px; display: flex; align-items: center; gap: 8px;">
+                                <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 10px var(--success);"></div> Live Connection
+                            </div>
+                        </div>
+                        <button class="btn-modern btn-modern-outline" style="width: 100%; color: var(--error); border-color: rgba(251, 113, 133, 0.3); margin-top: 24px;" onclick="logout()">
+                            <i class="fa-solid fa-power-off"></i> Terminate Session
+                        </button>
+                    </div>
+
+                    <!-- Encryption Status -->
+                    <div class="glass-card stat-card" style="grid-column: span 12; background: linear-gradient(135deg, rgba(16,16,24,0.6) 0%, rgba(99, 102, 241, 0.1) 100%);">
+                        <div style="display: flex; align-items: center; gap: 32px;">
+                            <div style="width: 64px; height: 64px; border-radius: 20px; background: var(--clr-primary-glow); color: var(--clr-primary); display: flex; align-items: center; justify-content: center; font-size: 1.75rem; border: 1px solid rgba(99,102,241,0.3);">
+                                <i class="fa-solid fa-lock"></i>
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 700; font-size: 1.25rem; margin-bottom: 4px;">AES-256 GCM Protocol Enforced</div>
+                                <div style="font-size: 0.95rem; color: var(--text-secondary);">Every document uploaded to the vault undergoes client-side encryption using military-grade AES-256-GCM. Keys are derived dynamically and never stored on the server.</div>
+                            </div>
+                            <div style="font-family: 'Geist Mono', monospace; font-size: 0.9rem; font-weight: 700; color: var(--clr-primary); background: rgba(99,102,241,0.15); padding: 12px 24px; border-radius: var(--radius-full); border: 1px solid rgba(99,102,241,0.3);">
+                                STATUS: SECURE
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin View -->
+            <div id="admin-dashboard" class="tab-view animate-slide-up" style="display: none;">
+                <h2 style="margin-bottom: 12px; color: var(--error); font-size: 2rem;"><i class="fa-solid fa-shield-virus"></i> Global Overseer Portal</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 40px; font-size: 1.1rem;">System-wide statistics and immutable audit records.</p>
+                
+                <div class="bento-stats">
+                    <div class="glass-card stat-card" style="border-color: rgba(251, 113, 133, 0.3);">
+                        <span class="label">Total Identities</span>
+                        <div class="value" id="adminTotalUsers">0</div>
+                    </div>
+                    <div class="glass-card stat-card" style="border-color: rgba(251, 113, 133, 0.3);">
+                        <span class="label">Encrypted Payloads</span>
+                        <div class="value" id="adminTotalDocs">0</div>
+                    </div>
+                    <div class="glass-card stat-card" style="border-color: rgba(251, 113, 133, 0.3);">
+                        <span class="label">Active Delegations</span>
+                        <div class="value" id="adminTotalShares">0</div>
+                    </div>
+                    <div class="glass-card stat-card" style="border-color: rgba(251, 113, 133, 0.3);">
+                        <span class="label">Platform Status</span>
+                        <div class="value" style="color: var(--success); font-size: 1.75rem; display: flex; align-items: center; gap: 12px;">
+                            <i class="fa-solid fa-server"></i> ONLINE
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="margin-bottom: 24px; font-size: 1.5rem;">Global Immutable Ledger (Last 100)</h3>
+                <div class="glass-card" style="padding: 0; overflow: hidden; max-height: 600px; overflow-y: auto;">
+                    <div id="adminLogsContainer">
+                        <div style="padding: 40px; text-align: center; color: var(--text-muted);">Syncing ledger...</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Mobile Navigation -->
+        <nav class="bottom-nav" style="display: none;">
+            <div class="nav-item active" onclick="switchTab('my-docs', this)"><i class="fa-solid fa-grid-2"></i></div>
+            <div class="nav-item" onclick="switchTab('activity-logs', this)"><i class="fa-solid fa-clock-rotate-left"></i></div>
+            <div class="nav-item" onclick="switchTab('profile', this)"><i class="fa-solid fa-fingerprint"></i></div>
+        </nav>
+    </div>
+
+    <!-- Upload Modal -->
+    <div id="uploadModal" class="modal-overlay">
+        <div class="modal-card animate-slide-up">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
+                <h3 style="font-size: 1.5rem;">Secure Upload</h3>
+                <button class="btn-modern-ghost" style="padding: 12px; border-radius: 50%; font-size: 1.2rem;" onclick="closeModal('uploadModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="uploadForm">
+                <div id="dropArea" style="border: 2px dashed var(--border-vibrant); border-radius: var(--radius-xl); padding: 64px 32px; text-align: center; cursor: pointer; background: rgba(0,0,0,0.2); transition: var(--transition-smooth);" onclick="document.getElementById('fileInput').click()">
+                    <i class="fa-solid fa-cloud-arrow-up" style="font-size: 3.5rem; color: var(--clr-primary); margin-bottom: 24px; text-shadow: 0 0 20px var(--clr-primary-glow);"></i>
+                    <h4 id="fileNameDisplay" style="margin-bottom: 12px; font-size: 1.1rem;">Select a file for encryption</h4>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Maximum 10MB • PDF or Images</p>
+                    <input type="file" id="fileInput" accept="image/*,.pdf" style="display: none;" required>
+                </div>
+                <div class="input-group" style="margin-top: 32px;">
+                    <label>Document Classification</label>
+                    <select id="docCategory" class="input-modern" style="width: 100%; cursor: pointer;">
+                        <option value="Identity" style="background: var(--bg-surface);">Identity (Aadhaar, PAN, Passport)</option>
+                        <option value="Property" style="background: var(--bg-surface);">Property & Tax</option>
+                        <option value="Medical" style="background: var(--bg-surface);">Medical & Health</option>
+                        <option value="Education" style="background: var(--bg-surface);">Education & Certificates</option>
+                        <option value="Uncategorized" selected style="background: var(--bg-surface);">Other / Uncategorized</option>
+                    </select>
+                </div>
+                <div id="uploadProgress" style="display: none; margin-top: 40px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.85rem; font-family: 'Geist Mono';">
+                        <span>Encrypting & Uploading</span>
+                        <span id="progressText">0%</span>
+                    </div>
+                    <div style="height: 8px; background: rgba(0,0,0,0.3); border-radius: 4px; overflow: hidden; border: 1px solid var(--border-subtle);">
+                        <div id="progressBar" style="height: 100%; width: 0%; background: linear-gradient(90deg, var(--clr-primary), var(--clr-accent)); transition: width 0.3s ease; box-shadow: 0 0 10px var(--clr-primary-glow);"></div>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 48px;">
+                    <button type="button" class="btn-modern btn-modern-outline" onclick="closeModal('uploadModal')">Abort</button>
+                    <button type="submit" class="btn-modern btn-modern-primary" id="uploadBtn"><i class="fa-solid fa-lock"></i> Encrypt & Store</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Share Modal -->
+    <div id="shareModal" class="modal-overlay">
+        <div class="modal-card animate-slide-up">
+            <h3 style="margin-bottom: 16px; font-size: 1.5rem;">Delegate Access</h3>
+            <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 40px;">Generate a secure, time-bound link for a verified recipient.</p>
+            <form id="shareForm">
+                <input type="hidden" id="shareDocId">
+                <div class="input-group" style="margin-bottom: 24px;">
+                    <label>Recipient's Email Address</label>
+                    <div style="position: relative;">
+                        <i class="fa-solid fa-envelope" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                        <input type="email" id="shareEmail" class="input-modern" placeholder="recipient@domain.com" style="padding-left: 48px;" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Time-to-Live (TTL in Days)</label>
+                    <div style="position: relative;">
+                        <i class="fa-solid fa-hourglass-half" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                        <input type="number" id="shareExpires" class="input-modern" placeholder="Optional (e.g., 7)" min="1" max="365" style="padding-left: 48px;">
+                    </div>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;"><i class="fa-solid fa-circle-info"></i> Leave empty for permanent delegation.</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 48px;">
+                    <button type="button" class="btn-modern btn-modern-outline" onclick="closeModal('shareModal')">Cancel</button>
+                    <button type="submit" class="btn-modern btn-modern-primary" id="shareBtn"><i class="fa-solid fa-paper-plane"></i> Grant Access</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div id="previewModal" class="modal-overlay" style="padding: 40px;">
+        <div class="modal-card animate-slide-up" style="max-width: 1000px; width: 100%; height: 85vh; display: flex; flex-direction: column; padding: 32px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-subtle);">
+                <h3 id="previewTitle" style="font-size: 1.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Document Preview</h3>
+                <div style="display: flex; gap: 12px;">
+                    <button class="btn-modern btn-modern-outline" id="downloadPreviewBtn" style="padding: 10px 16px;"><i class="fa-solid fa-download"></i> Download</button>
+                    <button class="btn-modern-ghost" style="padding: 10px; border-radius: 10px; border: 1px solid var(--border-subtle);" onclick="closeModal('previewModal')"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+            <div id="previewContent" style="flex: 1; overflow: hidden; background: rgba(0,0,0,0.5); border-radius: var(--radius-xl); border: 1px solid var(--border-vibrant); display: flex; align-items: center; justify-content: center; position: relative;">
+                <div id="previewLoader" style="position: absolute; display: none; flex-direction: column; align-items: center; gap: 16px;">
+                    <i class="fa-solid fa-circle-notch fa-spin fa-3x" style="color: var(--clr-primary);"></i>
+                    <span style="font-family: 'Geist Mono'; font-size: 0.9rem; color: var(--text-muted);">Decrypting stream...</span>
+                </div>
+                <img id="previewImage" style="max-width: 100%; max-height: 100%; object-fit: contain; display: none;">
+                <iframe id="previewPdf" style="width: 100%; height: 100%; border: none; display: none; background: #fff;"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">
+        <i class="fa-solid fa-circle-check" style="color: var(--success);" id="toastIcon"></i>
+        <span id="toastMsg"></span>
+    </div>
+
+    <script>
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user'));
+
+        if (!token || !user) {
+            window.location.href = '/index.html';
+        } else if (!user.aadhaar_verified) {
+            window.location.href = '/aadhaar-verify.html';
+        }
+
+        // Initialize Real-Time WebSockets
+        const socket = io();
+        socket.emit('join', user.email);
+        
+        socket.on('document_shared', (data) => {
+            showToast(`Access delegated: '${data.documentName}' from ${data.sharedBy}!`);
+            loadDashboardData();
+        });
+
+
+        // Init
+        document.getElementById('userNameDisplay').textContent = user.name;
+        document.getElementById('avatarInitial').textContent = user.name.charAt(0).toUpperCase();
+        if (user.aadhaar_last4) {
+            document.getElementById('aadhaarDisplay').textContent = `Ending in ${user.aadhaar_last4}`;
+        }
+        
+        // Show Admin Nav if admin
+        if (user.role === 'admin') {
+            document.getElementById('nav-admin').style.display = 'flex';
+            document.getElementById('userNameDisplay').innerHTML = `${user.name} <span class="badge badge-error" style="margin-left: 8px; border: none;"><i class="fa-solid fa-shield-virus"></i> SYSADMIN</span>`;
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            const toastIcon = document.getElementById('toastIcon');
+            toastMsg.textContent = message;
+            
+            if(type === 'error') {
+                toastIcon.className = 'fa-solid fa-circle-exclamation';
+                toastIcon.style.color = 'var(--error)';
+                toast.style.borderColor = 'var(--error)';
+            } else {
+                toastIcon.className = 'fa-solid fa-circle-check';
+                toastIcon.style.color = 'var(--success)';
+                toast.style.borderColor = 'var(--success)';
+            }
+
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 4000);
+        }
+
+        function switchTab(tabId, element) {
+            document.querySelectorAll('.tab-view').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).style.display = 'block';
+            if(element) element.classList.add('active');
+
+            if (tabId === 'my-docs') loadDashboardData();
+            if (tabId === 'activity-logs') loadLogs();
+            if (tabId === 'admin-dashboard' && user.role === 'admin') loadAdminDashboard();
+        }
+
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { 
+            document.getElementById(id).style.display = 'none';
+            if (id === 'uploadModal') {
+                document.getElementById('uploadForm').reset();
+                document.getElementById('fileNameDisplay').textContent = 'Select a file for encryption';
+                document.getElementById('uploadProgress').style.display = 'none';
+            }
+            if (id === 'previewModal') {
+                document.getElementById('previewImage').src = '';
+                document.getElementById('previewPdf').src = '';
+                document.getElementById('previewImage').style.display = 'none';
+                document.getElementById('previewPdf').style.display = 'none';
+                if (window._previewUrl) {
+                    window.URL.revokeObjectURL(window._previewUrl);
+                    window._previewUrl = null;
+                }
+            }
+        }
+
+        async function previewDoc(id, name, mimetype) {
+            const previewModal = document.getElementById('previewModal');
+            const previewTitle = document.getElementById('previewTitle');
+            const previewImage = document.getElementById('previewImage');
+            const previewPdf = document.getElementById('previewPdf');
+            const previewLoader = document.getElementById('previewLoader');
+            const downloadBtn = document.getElementById('downloadPreviewBtn');
+
+            previewTitle.textContent = name;
+            previewLoader.style.display = 'flex';
+            openModal('previewModal');
+
+            try {
+                const res = await fetchAPI(`/api/documents/${id}/download`);
+                if (!res.ok) throw new Error('Preview failed');
+                
+                const blob = await res.blob();
+                const url = window.URL.createObjectURL(blob);
+                window._previewUrl = url;
+                
+                downloadBtn.onclick = () => {
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = name;
+                    a.click();
+                };
+
+                if (mimetype.startsWith('image/')) {
+                    previewImage.src = url;
+                    previewImage.style.display = 'block';
+                    previewPdf.style.display = 'none';
+                } else if (mimetype === 'application/pdf') {
+                    previewPdf.src = url;
+                    previewPdf.style.display = 'block';
+                    previewImage.style.display = 'none';
+                } else {
+                    showToast('Preview not supported for this type', 'warning');
+                    closeModal('previewModal');
+                }
+            } catch (err) {
+                showToast('Failed to stream decrypted file', 'error');
+                closeModal('previewModal');
+            } finally {
+                previewLoader.style.display = 'none';
+            }
+        }
+
+        async function fetchAPI(url, options = {}) {
+            const headers = { 'Authorization': `Bearer ${token}`, ...(options.headers || {}) };
+            const response = await fetch(url, { ...options, headers });
+            if (response.status === 401) logout();
+            return response;
+        }
+
+        function logout() { localStorage.clear(); window.location.href = '/index.html'; }
+
+        // Data Management
+        let ownedDocs = [];
+        let sharedWithMeDocs = [];
+
+        async function loadDashboardData() {
+            try {
+                const [ownedRes, sharedRes, logsRes] = await Promise.all([
+                    fetchAPI('/api/documents'),
+                    fetchAPI('/api/shares'),
+                    fetchAPI('/api/logs')
+                ]);
+
+                const ownedData = await ownedRes.json();
+                const sharedData = await sharedRes.json();
+
+                ownedDocs = ownedData.documents.map(d => ({ ...d, ownership: 'owned' }));
+                sharedWithMeDocs = sharedData.sharedDocuments.map(d => ({ ...d, ownership: 'shared' }));
+                
+                document.getElementById('totalCount').textContent = ownedDocs.length + sharedWithMeDocs.length;
+                document.getElementById('sharedOutCount').textContent = ownedDocs.filter(d => d.shared_with && d.shared_with.length > 0).length;
+                document.getElementById('sharedInCount').textContent = sharedWithMeDocs.length;
+                
+                handleFilters();
+            } catch (err) { showToast('Vault synchronization failed', 'error'); }
+        }
+
+        function handleFilters() {
+            const searchInput = document.getElementById('searchInput');
+            const query = searchInput ? searchInput.value.toLowerCase() : '';
+            let all = [...ownedDocs, ...sharedWithMeDocs];
+            if (query) {
+                all = all.filter(d => d.original_name.toLowerCase().includes(query));
+            }
+            renderDocs(all);
+        }
+
+        function renderDocs(docs) {
+            const container = document.getElementById('docsContainer');
+            const emptyState = document.getElementById('emptyState');
+
+            if (docs.length === 0) {
+                container.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            container.style.display = 'grid';
+            emptyState.style.display = 'none';
+
+            container.innerHTML = docs.map(doc => `
+                <div class="glass-card spotlight-card doc-card animate-reveal">
+                    <div class="doc-header" style="margin-bottom: 24px;">
+                        <div class="doc-icon-wrap" style="box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
+                            <i class="fa-solid ${doc.mimetype === 'application/pdf' ? 'fa-file-pdf' : 'fa-image'}"></i>
+                        </div>
+                        <div class="badge" style="border: none; ${doc.ownership === 'owned' ? 'background: var(--clr-primary); color: white;' : 'background: rgba(255,255,255,0.1); color: var(--text-secondary);'}">
+                            ${doc.ownership === 'owned' ? '<i class="fa-solid fa-crown"></i> Owner' : '<i class="fa-solid fa-link"></i> Shared'}
+                        </div>
+                    </div>
+                    
+                    <div class="doc-meta">
+                        <h4 class="truncate" title="${doc.original_name}">${doc.original_name}</h4>
+                        <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500; margin-top: 8px; display: flex; align-items: center; gap: 8px;">
+                            <span style="background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px;">${doc.category || 'Uncategorized'}</span>
+                            <span>•</span>
+                            <span>${doc.ownership === 'owned' ? `${new Date(doc.uploaded_at).toLocaleDateString()}` : `By ${doc.shared_by_name}`}</span>
+                        </div>
+                        ${doc.expires_at ? `<div style="font-size: 0.75rem; color: var(--warning); margin-top: 12px; background: rgba(251, 191, 36, 0.1); padding: 4px 8px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px;"><i class="fa-solid fa-clock"></i> Expires: ${new Date(doc.expires_at).toLocaleDateString()}</div>` : ''}
+                    </div>
+
+                    <div class="action-row" style="display: grid; grid-template-columns: ${doc.ownership === 'owned' ? 'repeat(4, 1fr)' : '1fr'}; gap: 8px; border-top: 1px solid var(--border-subtle); padding-top: 20px;">
+                        <button class="btn-modern btn-modern-outline" style="padding: 10px; font-size: 0.85rem;" onclick="previewDoc(${doc.id || doc.document_id}, '${doc.original_name.replace(/'/g, "\\'")}', '${doc.mimetype}')" title="Preview">
+                            <i class="fa-solid fa-eye"></i> ${doc.ownership === 'owned' ? '' : 'View Access'}
+                        </button>
+                        ${doc.ownership === 'owned' ? `
+                            <button class="btn-modern btn-modern-outline" style="padding: 10px; color: var(--text-primary);" onclick="downloadOriginal(${doc.id})" title="Download Original">
+                                <i class="fa-solid fa-download"></i>
+                            </button>
+                            <button class="btn-modern btn-modern-outline" style="padding: 10px; color: var(--clr-primary);" onclick="openShareModal(${doc.id})" title="Delegate Access">
+                                <i class="fa-solid fa-share-nodes"></i>
+                            </button>
+                            <button class="btn-modern btn-modern-outline" style="padding: 10px; color: var(--error);" onclick="deleteDoc(${doc.id})" title="Wipe Data">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Logs
+        async function loadLogs() {
+            const container = document.getElementById('logsContainer');
+            try {
+                const res = await fetchAPI('/api/logs');
+                const data = await res.json();
+                
+                if (data.logs.length === 0) {
+                    container.innerHTML = `
+                        <div style="padding: 80px 20px; text-align: center;">
+                            <div style="position: relative; width: 100px; height: 100px; margin: 0 auto 24px;">
+                                <div style="position: absolute; inset: 0; background: rgba(255,255,255,0.05); border-radius: 50%; filter: blur(15px);"></div>
+                                <i class="fa-solid fa-receipt" style="font-size: 3rem; color: var(--text-muted); position: relative; z-index: 1; margin-top: 25px;"></i>
+                            </div>
+                            <h3 style="margin-bottom: 12px; font-size: 1.5rem;">No Activity Recorded</h3>
+                            <p style="color: var(--text-secondary); max-width: 400px; margin: 0 auto; font-size: 1rem;">Your cryptographically signed audit trail will populate here once actions occur.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = data.logs.map(log => {
+                    let icon = 'fa-circle-dot';
+                    let color = 'var(--clr-primary)';
+                    if (log.action === 'UPLOAD') icon = 'fa-cloud-arrow-up';
+                    if (log.action === 'SHARE') icon = 'fa-share-nodes';
+                    if (log.action === 'DELETE') { icon = 'fa-trash-can'; color = 'var(--error)'; }
+                    if (log.action === 'DOWNLOAD') icon = 'fa-download';
+
+                    return `
+                        <div class="animate-reveal" style="padding: 24px 32px; border-bottom: 1px solid var(--border-subtle); display: flex; gap: 24px; align-items: flex-start; transition: var(--transition-smooth);">
+                            <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: center; color: ${color}; flex-shrink: 0; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+                                <i class="fa-solid ${icon}" style="font-size: 1.1rem;"></i>
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                                    <span style="font-weight: 600; font-size: 1.05rem; color: var(--text-primary);">${log.details}</span>
+                                    <span style="font-size: 0.85rem; color: var(--text-muted); font-family: 'Geist Mono', monospace;">${new Date(log.timestamp).toLocaleTimeString()}</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <span class="badge" style="font-size: 0.65rem; background: ${color}15; color: ${color}; border: 1px solid ${color}30;"><i class="fa-solid fa-hashtag"></i> ${log.action}</span>
+                                    <span style="font-size: 0.85rem; color: var(--text-muted);">${new Date(log.timestamp).toLocaleDateString()}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (err) { showToast('Audit ledger unavailable', 'error'); }
+        }
+
+        // Admin Dashboard Loader
+        async function loadAdminDashboard() {
+            try {
+                const [statsRes, logsRes] = await Promise.all([
+                    fetchAPI('/api/admin/stats'),
+                    fetchAPI('/api/admin/logs')
+                ]);
+                const stats = await statsRes.json();
+                const logsData = await logsRes.json();
+
+                document.getElementById('adminTotalUsers').textContent = stats.totalUsers || 0;
+                document.getElementById('adminTotalDocs').textContent = stats.totalDocuments || 0;
+                document.getElementById('adminTotalShares').textContent = stats.totalShares || 0;
+
+                const container = document.getElementById('adminLogsContainer');
+                if (logsData.logs.length === 0) {
+                    container.innerHTML = `
+                        <div style="padding: 60px 20px; text-align: center;">
+                            <div style="position: relative; width: 80px; height: 80px; margin: 0 auto 20px;">
+                                <div style="position: absolute; inset: 0; background: var(--error); opacity: 0.1; border-radius: 50%; filter: blur(15px);"></div>
+                                <i class="fa-solid fa-server" style="font-size: 2.5rem; color: var(--error); position: relative; z-index: 1; margin-top: 20px;"></i>
+                            </div>
+                            <h4 style="margin-bottom: 12px; font-size: 1.25rem;">Ledger Empty</h4>
+                            <p style="color: var(--text-secondary); font-size: 1rem;">Global transactions will appear here.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = logsData.logs.map(log => `
+                    <div style="padding: 20px 32px; border-bottom: 1px solid var(--border-subtle); display: flex; gap: 24px; align-items: center; transition: background 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.02)'" onmouseout="this.style.background='transparent'">
+                        <div style="font-size: 0.85rem; color: var(--text-muted); width: 160px; font-family: 'Geist Mono', monospace;">
+                            ${new Date(log.timestamp).toLocaleString()}
+                        </div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600; font-size: 0.95rem; margin-bottom: 4px;">${log.user_name} <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem; margin-left: 8px;">${log.user_email}</span></div>
+                            <div style="color: var(--text-secondary); font-size: 0.9rem;">${log.details}</div>
+                        </div>
+                        <span class="badge" style="font-size: 0.7rem; background: rgba(255,255,255,0.05); color: var(--text-primary); border: 1px solid var(--border-vibrant);">${log.action}</span>
+                    </div>
+                `).join('');
+            } catch (err) {
+                showToast('Failed to sync global stats', 'error');
+            }
+        }
+        
+        // Actions
+        async function downloadOriginal(id) {
+            const res = await fetchAPI(`/api/documents/${id}/download-original`);
+            if (res.ok) {
+                const blob = await res.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `Secure_Original_Document`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                showToast('Original payload decrypted and downloaded');
+            } else {
+                showToast('Decryption failed or access denied', 'error');
+            }
+        }
+
+        async function deleteDoc(id) {
+            if (!confirm('WARNING: This will permanently wipe the encrypted payload from storage. Proceed?')) return;
+            try {
+                const res = await fetchAPI(`/api/documents/${id}`, { method: 'DELETE' });
+                if (res.ok) { showToast('Payload wiped successfully'); loadDashboardData(); }
+            } catch (err) { showToast('Wipe failed', 'error'); }
+        }
+
+        // Upload/Share Event Handlers
+        document.getElementById('fileInput').onchange = (e) => {
+            if (e.target.files[0]) {
+                document.getElementById('fileNameDisplay').textContent = e.target.files[0].name;
+                document.getElementById('fileNameDisplay').style.color = 'var(--text-primary)';
+            }
+        };
+
+        document.getElementById('uploadForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const file = document.getElementById('fileInput').files[0];
+            if (!file) return;
+
+            document.getElementById('uploadProgress').style.display = 'block';
+            document.getElementById('uploadBtn').disabled = true;
+            document.getElementById('uploadBtn').innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Encrypting...';
+            
+            const formData = new FormData();
+            formData.append('document', file);
+            formData.append('category', document.getElementById('docCategory').value);
+
+            let p = 0;
+            const progressText = document.getElementById('progressText');
+            const iv = setInterval(() => { 
+                p += Math.floor(Math.random() * 15) + 5; 
+                if (p > 95) p = 95;
+                document.getElementById('progressBar').style.width = p + '%'; 
+                progressText.textContent = p + '%';
+            }, 150);
+
+            try {
+                const res = await fetchAPI('/api/documents/upload', { method: 'POST', body: formData });
+                clearInterval(iv);
+                if (res.ok) { 
+                    document.getElementById('progressBar').style.width = '100%';
+                    progressText.textContent = '100%';
+                    setTimeout(() => {
+                        showToast('Payload encrypted & stored'); 
+                        closeModal('uploadModal'); 
+                        loadDashboardData(); 
+                    }, 500);
+                } else {
+                    throw new Error('Upload error');
+                }
+            } catch (err) { 
+                clearInterval(iv);
+                showToast('Encryption process failed', 'error'); 
+            }
+            finally { 
+                setTimeout(() => {
+                    document.getElementById('uploadBtn').disabled = false; 
+                    document.getElementById('uploadBtn').innerHTML = '<i class="fa-solid fa-lock"></i> Encrypt & Store';
+                }, 500);
+            }
+        };
+
+        function openShareModal(id) {
+            document.getElementById('shareDocId').value = id;
+            openModal('shareModal');
+        }
+
+        document.getElementById('shareForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const submitBtn = document.getElementById('shareBtn');
+            const originalHtml = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Processing...';
+            
+            try {
+                const reqBody = { 
+                    documentId: document.getElementById('shareDocId').value, 
+                    shareWithEmail: document.getElementById('shareEmail').value.trim() 
+                };
+                
+                const expires = document.getElementById('shareExpires').value;
+                if (expires) reqBody.expiresInDays = parseInt(expires);
+
+                const res = await fetchAPI('/api/shares', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(reqBody)
+                });
+                if (res.ok) { 
+                    showToast('Cryptographic access delegated'); 
+                    closeModal('shareModal'); 
+                    loadDashboardData(); 
+                    document.getElementById('shareForm').reset();
+                } else {
+                    throw new Error('Share error');
+                }
+            } catch (err) { 
+                showToast('Delegation failed', 'error'); 
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalHtml;
+            }
+        };
+
+        // --- Page Transition Logic ---
+        document.body.classList.remove('fade-out');
+        
+        document.querySelectorAll('a, .nav-item[onclick="logout()"]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                if (link.hasAttribute('onclick') && link.getAttribute('onclick') === 'logout()') {
+                    document.body.classList.add('fade-out');
+                    return;
+                }
+                if (link.href && !link.href.includes('#') && link.target !== '_blank') {
+                    e.preventDefault();
+                    document.body.classList.add('fade-out');
+                    setTimeout(() => window.location = link.href, 400);
+                }
+            });
+        });
+
+        // --- Cursor Spotlight Logic ---
+        document.addEventListener('mousemove', e => {
+            document.querySelectorAll('.spotlight-card').forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        // --- Chart.js Initialization ---
+        let activityChartInstance = null;
+        function renderActivityChart(owned, shared) {
+            const ctx = document.getElementById('activityChart');
+            if(!ctx) return;
+            
+            if (activityChartInstance) activityChartInstance.destroy();
+            
+            const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+            const primaryColor = isLight ? '#6366f1' : '#818cf8';
+            const accentColor = isLight ? '#a855f7' : '#c084fc';
+            const gridColor = isLight ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.05)';
+
+            activityChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Interactions',
+                        data: [Math.floor(Math.random()*10), Math.floor(Math.random()*15), owned.length, shared.length, Math.floor(Math.random()*20), owned.length+shared.length, Math.floor(Math.random()*5)],
+                        borderColor: primaryColor,
+                        backgroundColor: (context) => {
+                            if(!context.chart.ctx) return 'transparent';
+                            const gradient = context.chart.ctx.createLinearGradient(0, 0, 0, 150);
+                            gradient.addColorStop(0, primaryColor + '80');
+                            gradient.addColorStop(1, primaryColor + '00');
+                            return gradient;
+                        },
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: accentColor,
+                        pointBorderColor: '#fff',
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } },
+                    scales: {
+                        x: { grid: { display: false, drawBorder: false }, ticks: { color: 'var(--text-muted)', font: { size: 10 } } },
+                        y: { grid: { color: gridColor, drawBorder: false }, ticks: { display: false } }
+                    }
+                }
+            });
+        }
+
+        const originalLoadDashboardData = loadDashboardData;
+        loadDashboardData = async function() {
+            await originalLoadDashboardData();
+            renderActivityChart(ownedDocs, sharedWithMeDocs);
+        };
+
+        loadDashboardData();
+    </script>
+</body>
+</html>

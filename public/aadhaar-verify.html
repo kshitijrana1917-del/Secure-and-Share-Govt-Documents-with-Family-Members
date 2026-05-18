@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Identity Linkage | GovSecure</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="/js/theme.js"></script>
+    <style>
+        .onboarding-layout {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .onboarding-card {
+            width: 100%;
+            max-width: 480px;
+            padding: 48px;
+        }
+
+        .step-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .step-number {
+            width: 28px;
+            height: 28px;
+            background: var(--clr-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+            box-shadow: 0 0 15px var(--clr-primary-glow);
+        }
+
+        .step-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .method-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .method-card {
+            padding: 20px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            cursor: pointer;
+            transition: var(--transition-bounce);
+            text-align: center;
+        }
+
+        .method-card:hover {
+            border-color: var(--border-vibrant);
+            transform: translateY(-2px);
+        }
+
+        .method-card.active {
+            border-color: var(--clr-primary);
+            background: var(--clr-primary-glow);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .method-card i {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            display: block;
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+        }
+
+        .method-card.active i {
+            color: var(--clr-primary);
+        }
+
+        .method-card span {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .method-card.active span {
+            color: var(--text-primary);
+        }
+
+        .aadhaar-input {
+            width: 100%;
+            padding: 24px;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            font-size: 1.75rem;
+            font-weight: 700;
+            letter-spacing: 0.25em;
+            text-align: center;
+            color: var(--text-primary);
+            font-family: 'Geist Mono', monospace;
+            transition: var(--transition-smooth);
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .aadhaar-input:focus {
+            outline: none;
+            border-color: var(--clr-primary);
+            box-shadow: 0 0 0 4px var(--clr-primary-glow), inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .security-note {
+            display: flex;
+            gap: 16px;
+            padding: 20px;
+            background: rgba(52, 211, 153, 0.05);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(52, 211, 153, 0.2);
+            margin-top: 32px;
+        }
+
+        .security-note i {
+            color: var(--success);
+            font-size: 1.25rem;
+            margin-top: 2px;
+        }
+
+        .security-note p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        #verifyAadhaarOtpForm { display: none; }
+
+        .toast {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            padding: 16px 24px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-vibrant);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+            z-index: 1000;
+            transition: var(--transition-bounce);
+            transform: translateY(150%);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        .toast.show { transform: translateY(0); }
+    </style>
+</head>
+<body class="page-transition fade-out">
+    <button class="btn-modern-ghost" onclick="toggleTheme()" style="position: fixed; top: 24px; right: 24px; z-index: 100; border-radius: 50%; padding: 12px; background: var(--bg-surface); border: 1px solid var(--border-subtle);">
+        <i class="fa-solid fa-circle-half-stroke"></i>
+    </button>
+    <div class="bg-visuals">
+        <div class="mesh-gradient"></div>
+        <div class="noise-overlay"></div>
+        <div class="blob" style="top: 20%; right: 10%; background: var(--clr-accent);"></div>
+    </div>
+
+    <div class="onboarding-layout">
+        <div class="glass-card spotlight-card onboarding-card animate-slide-up">
+            <div class="step-info">
+                <div class="step-number">2</div>
+                <div class="step-label">Identity Verification</div>
+            </div>
+
+            <div id="selectionArea">
+                <h2 style="margin-bottom: 12px; font-size: 1.75rem;">Link your Aadhaar</h2>
+                <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 32px;">To access the vault, we need to cryptographically verify your identity through UIDAI.</p>
+
+                <div class="method-selector">
+                    <div id="useEmailBtn" class="method-card active">
+                        <i class="fa-solid fa-envelope"></i>
+                        <span>Email OTP</span>
+                    </div>
+                    <div id="useSmsBtn" class="method-card">
+                        <i class="fa-solid fa-mobile-screen"></i>
+                        <span>SMS OTP</span>
+                    </div>
+                </div>
+
+                <form id="aadhaarForm">
+                    <div class="input-group">
+                        <label style="margin-bottom: 12px;">12-Digit Aadhaar Number</label>
+                        <input type="text" id="aadhaarNumber" class="aadhaar-input" placeholder="0000 0000 0000" maxlength="14" required>
+                    </div>
+
+                    <div id="mobileField" class="input-group" style="display: none; margin-top: 24px;">
+                        <label>Linked Mobile Number</label>
+                        <input type="tel" id="mobileNumber" class="input-modern" placeholder="+91 00000 00000">
+                    </div>
+
+                    <button type="submit" id="submitAadhaarBtn" class="btn-modern btn-modern-primary" style="width: 100%; margin-top: 32px;">
+                        Initialize Linkage <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- OTP Verification Form -->
+            <form id="verifyAadhaarOtpForm">
+                <h2 style="margin-bottom: 12px; font-size: 1.75rem;">Security Verification</h2>
+                <p id="otpInfoText" style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 32px;">A 6-digit code has been sent to your email.</p>
+                
+                <div class="input-group">
+                    <label style="margin-bottom: 12px;">Security Code</label>
+                    <input type="text" id="aadhaarOtp" class="aadhaar-input" placeholder="······" maxlength="6" required pattern="[0-9]{6}" style="font-size: 2.5rem; letter-spacing: 0.5em;">
+                </div>
+                
+                <button type="submit" class="btn-modern btn-modern-primary" style="width: 100%; margin-top: 32px;">
+                    Verify & Activate Vault
+                </button>
+                
+                <button type="button" id="changeAadhaarBtn" class="btn-modern btn-modern-ghost" style="width: 100%; margin-top: 16px;">
+                    <i class="fa-solid fa-arrow-left"></i> Back to details
+                </button>
+            </form>
+
+            <div class="security-note">
+                <i class="fa-solid fa-shield-check"></i>
+                <p>Identity data is processed using end-to-end encryption. We do not store your full Aadhaar number, only the cryptographic proof.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">
+        <i class="fa-solid fa-circle-check"></i>
+        <span id="toastMsg"></span>
+    </div>
+
+    <script>
+        const selectionArea = document.getElementById('selectionArea');
+        const aadhaarForm = document.getElementById('aadhaarForm');
+        const verifyAadhaarOtpForm = document.getElementById('verifyAadhaarOtpForm');
+        const aadhaarNumberInput = document.getElementById('aadhaarNumber');
+        const mobileNumberInput = document.getElementById('mobileNumber');
+        const aadhaarOtpInput = document.getElementById('aadhaarOtp');
+        const changeAadhaarBtn = document.getElementById('changeAadhaarBtn');
+        const useEmailBtn = document.getElementById('useEmailBtn');
+        const useSmsBtn = document.getElementById('useSmsBtn');
+        const mobileField = document.getElementById('mobileField');
+        const submitAadhaarBtn = document.getElementById('submitAadhaarBtn');
+        const otpInfoText = document.getElementById('otpInfoText');
+        const toast = document.getElementById('toast');
+        const toastMsg = document.getElementById('toastMsg');
+
+        let verificationMethod = 'email';
+        const token = localStorage.getItem('token');
+
+        if (!token) window.location.href = '/index.html';
+
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        if (user.aadhaar_verified) window.location.href = '/dashboard.html';
+
+        function showToast(message, type = 'success') {
+            toastMsg.textContent = message;
+            toast.classList.add('show');
+            const icon = toast.querySelector('i');
+            
+            if (type === 'error') {
+                toast.style.borderColor = 'var(--error)';
+                icon.className = 'fa-solid fa-circle-exclamation';
+                icon.style.color = 'var(--error)';
+            } else {
+                toast.style.borderColor = 'var(--success)';
+                icon.className = 'fa-solid fa-circle-check';
+                icon.style.color = 'var(--success)';
+            }
+            setTimeout(() => toast.classList.remove('show'), 4000);
+        }
+
+        useEmailBtn.addEventListener('click', () => {
+            verificationMethod = 'email';
+            useEmailBtn.classList.add('active');
+            useSmsBtn.classList.remove('active');
+            mobileField.style.display = 'none';
+            mobileNumberInput.required = false;
+            otpInfoText.textContent = 'Enter the security code sent to your email';
+        });
+
+        useSmsBtn.addEventListener('click', () => {
+            verificationMethod = 'sms';
+            useSmsBtn.classList.add('active');
+            useEmailBtn.classList.remove('active');
+            mobileField.style.display = 'block';
+            mobileNumberInput.required = true;
+            otpInfoText.textContent = 'Enter the security code sent to your mobile';
+        });
+
+        aadhaarForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const originalHtml = submitAadhaarBtn.innerHTML;
+            submitAadhaarBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Securing...';
+            submitAadhaarBtn.disabled = true;
+
+            try {
+                const res = await fetch('/api/auth/aadhaar/request-otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ 
+                        aadhaarNumber: aadhaarNumberInput.value.replace(/\s/g, ''), 
+                        mobile: verificationMethod === 'sms' ? mobileNumberInput.value : null,
+                        method: verificationMethod 
+                    })
+                });
+                const data = await res.json();
+                
+                if (res.ok) {
+                    showToast(data.message);
+                    selectionArea.style.display = 'none';
+                    verifyAadhaarOtpForm.style.display = 'block';
+                    aadhaarOtpInput.focus();
+                } else {
+                    showToast(data.error || 'Portal unavailable', 'error');
+                }
+            } catch (err) {
+                showToast('Network error', 'error');
+            } finally {
+                submitAadhaarBtn.innerHTML = originalHtml;
+                submitAadhaarBtn.disabled = false;
+            }
+        });
+
+        verifyAadhaarOtpForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalHtml = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Activating...';
+            submitBtn.disabled = true;
+
+            try {
+                const res = await fetch('/api/auth/aadhaar/verify-otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ otp: aadhaarOtpInput.value.trim() })
+                });
+                const data = await res.json();
+                
+                if (res.ok) {
+                    showToast('Vault Synchronized!');
+                    user.aadhaar_verified = true;
+                    user.aadhaar_last4 = data.aadhaar_last4;
+                    localStorage.setItem('user', JSON.stringify(user));
+                    setTimeout(() => window.location.href = '/dashboard.html', 1000);
+                } else {
+                    showToast(data.error || 'Invalid code', 'error');
+                    submitBtn.innerHTML = originalHtml;
+                    submitBtn.disabled = false;
+                }
+            } catch (err) {
+                showToast('Sync error', 'error');
+                submitBtn.innerHTML = originalHtml;
+                submitBtn.disabled = false;
+            }
+        });
+
+        changeAadhaarBtn.addEventListener('click', () => {
+            verifyAadhaarOtpForm.style.display = 'none';
+            selectionArea.style.display = 'block';
+            aadhaarOtpInput.value = '';
+        });
+
+        aadhaarNumberInput.addEventListener('input', (e) => {
+            let val = e.target.value.replace(/\D/g, '');
+            let formatted = val.match(/.{1,4}/g)?.join(' ') || val;
+            e.target.value = formatted;
+        });
+
+        // --- Page Transition Logic ---
+        document.body.classList.remove('fade-out');
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                if (link.href && !link.href.includes('#') && link.target !== '_blank') {
+                    e.preventDefault();
+                    document.body.classList.add('fade-out');
+                    setTimeout(() => window.location = link.href, 400);
+                }
+            });
+        });
+
+        // --- Cursor Spotlight Logic ---
+        document.addEventListener('mousemove', e => {
+            document.querySelectorAll('.spotlight-card').forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+    </script>
+</body>
+</html>

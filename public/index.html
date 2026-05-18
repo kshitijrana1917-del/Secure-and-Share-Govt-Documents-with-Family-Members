@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GovSecure | Enterprise Vault</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="/js/theme.js"></script>
+    <style>
+        .auth-layout {
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-section {
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 8vw;
+            position: relative;
+            border-right: 1px solid var(--border-vibrant);
+        }
+
+        .form-section {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4vw;
+            background: rgba(3, 3, 5, 0.6);
+            backdrop-filter: blur(50px);
+        }
+
+        .hero-title {
+            font-size: clamp(3.5rem, 6vw, 5.5rem);
+            line-height: 1.05;
+            margin-bottom: 24px;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 500px;
+            margin-bottom: 48px;
+            line-height: 1.7;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 440px;
+            padding: 48px;
+        }
+
+        .logo-box {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #fff, #a1a1aa);
+            color: #000;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 20px rgba(255,255,255,0.1);
+        }
+
+        .step-indicator {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .step-dot {
+            height: 4px;
+            flex: 1;
+            background: var(--border-active);
+            border-radius: var(--radius-full);
+            transition: var(--transition-smooth);
+        }
+
+        .step-dot.active { background: var(--clr-primary); box-shadow: 0 0 10px var(--clr-primary-glow); }
+        .step-dot.done { background: var(--success); }
+
+        .auth-footer {
+            margin-top: 48px;
+            font-size: 0.85rem;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        @media (max-width: 992px) {
+            .auth-layout { flex-direction: column; }
+            .hero-section { flex: none; padding: 40px 24px; border-right: none; border-bottom: 1px solid var(--border-vibrant); }
+            .hero-title { font-size: 2.5rem; }
+            .form-section { padding: 24px; }
+            .login-card { padding: 32px; max-width: 100%; }
+        }
+
+        /* Toast styling is in style.css, but we need specific positioning */
+        .toast {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            background: var(--bg-elevated);
+            padding: 16px 24px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-vibrant);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1000;
+            transform: translateY(150%);
+            transition: var(--transition-bounce);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        .toast.show { transform: translateY(0); }
+    </style>
+</head>
+<body class="page-transition fade-out">
+    <button class="btn-modern-ghost" onclick="toggleTheme()" style="position: fixed; top: 24px; right: 24px; z-index: 100; border-radius: 50%; padding: 12px; background: var(--bg-surface); border: 1px solid var(--border-subtle);">
+        <i class="fa-solid fa-circle-half-stroke"></i>
+    </button>
+
+    <div class="bg-visuals">
+        <div class="mesh-gradient"></div>
+        <div class="noise-overlay"></div>
+        <div class="blob" style="top: -20%; left: -10%;"></div>
+        <div class="blob" style="bottom: -20%; right: -10%; background: var(--clr-accent); animation-delay: -5s;"></div>
+    </div>
+
+    <div class="auth-layout">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <div class="animate-slide-up">
+                <div class="badge badge-primary" style="margin-bottom: 32px;">
+                    <i class="fa-solid fa-shield-check"></i> Enterprise Security v2.0
+                </div>
+                <h1 class="hero-title">
+                    The <span class="text-gradient">Next-Gen</span><br>
+                    Document Vault.
+                </h1>
+                <p class="hero-subtitle">
+                    Military-grade encryption meets hyper-modern design. Secure your sensitive government and personal documents with absolute cryptographic certainty.
+                </p>
+                
+                <div class="bento-grid" style="grid-template-columns: repeat(2, 1fr); gap: 16px; max-width: 480px;">
+                    <div class="glass-card spotlight-card" style="padding: 20px;">
+                        <i class="fa-solid fa-microchip" style="font-size: 1.5rem; color: var(--clr-accent); margin-bottom: 12px;"></i>
+                        <h4 style="font-size: 1rem; margin-bottom: 4px;">AES-256 GCM</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">End-to-end payload encryption.</p>
+                    </div>
+                    <div class="glass-card spotlight-card" style="padding: 20px;">
+                        <i class="fa-solid fa-fingerprint" style="font-size: 1.5rem; color: var(--success); margin-bottom: 12px;"></i>
+                        <h4 style="font-size: 1rem; margin-bottom: 4px;">Aadhaar Linked</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">Cryptographic identity proof.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Section -->
+        <div class="form-section">
+            <div class="glass-card spotlight-card login-card animate-slide-up" style="animation-delay: 0.2s;">
+                <div class="logo-box">
+                    <i class="fa-solid fa-vault"></i>
+                </div>
+                
+                <h2 style="margin-bottom: 8px; font-size: 1.75rem;">Authenticate</h2>
+                <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 32px;">Access your secured workspace.</p>
+
+                <div class="step-indicator">
+                    <div class="step-dot active" id="dot1"></div>
+                    <div class="step-dot" id="dot2"></div>
+                    <div class="step-dot" id="dot3"></div>
+                </div>
+
+                <!-- Phase 1: Request OTP -->
+                <form id="requestOtpForm">
+                    <div class="input-group" style="margin-bottom: 24px;">
+                        <label for="email">Work Email</label>
+                        <div style="position: relative;">
+                            <i class="fa-solid fa-envelope" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                            <input type="email" id="email" class="input-modern" placeholder="name@gov.in" style="padding-left: 48px;" required autofocus>
+                        </div>
+                    </div>
+                    <div class="input-group" style="margin-bottom: 32px;">
+                        <label for="name">Full Name (Optional)</label>
+                        <div style="position: relative;">
+                            <i class="fa-regular fa-user" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                            <input type="text" id="name" class="input-modern" placeholder="e.g. A. Sharma" style="padding-left: 48px;">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-modern btn-modern-primary" style="width: 100%;">
+                        Initialize Session <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </form>
+
+                <!-- Phase 2: Verify OTP -->
+                <form id="verifyOtpForm" style="display: none;">
+                    <div class="glass-card" style="padding: 16px; margin-bottom: 24px; border-radius: var(--radius-md); background: rgba(0,0,0,0.2);">
+                        <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 4px;">Authorization code sent to</p>
+                        <span id="displayEmail" style="font-weight: 600; font-size: 0.95rem;"></span>
+                    </div>
+                    
+                    <div class="input-group" style="margin-bottom: 32px;">
+                        <label for="otp">Enter 6-Digit Code</label>
+                        <input type="text" id="otp" class="input-modern mono" placeholder="······" maxlength="6" required pattern="[0-9]{6}" style="letter-spacing: 0.5em; text-align: center; font-size: 1.5rem; padding: 20px;">
+                    </div>
+                    
+                    <button type="submit" class="btn-modern btn-modern-primary" style="width: 100%; margin-bottom: 16px;">
+                        Verify Identity
+                    </button>
+                    <button type="button" id="backBtn" class="btn-modern btn-modern-ghost" style="width: 100%;">
+                        <i class="fa-solid fa-arrow-left"></i> Modify Email
+                    </button>
+                </form>
+
+                <!-- Phase 3: Verify 2FA SMS OTP -->
+                <form id="verifySmsOtpForm" style="display: none;">
+                    <div class="glass-card" style="padding: 16px; margin-bottom: 24px; border-radius: var(--radius-md); border-color: var(--warning); background: rgba(251, 191, 36, 0.05);">
+                        <p style="color: var(--warning); font-size: 0.8rem; margin-bottom: 4px;"><i class="fa-solid fa-shield-halved"></i> 2FA Required</p>
+                        <p style="color: var(--text-secondary); font-size: 0.85rem;">SMS Code sent to <span id="displayMobile" style="font-weight: 700; color: var(--text-primary);"></span></p>
+                    </div>
+                    
+                    <div class="input-group" style="margin-bottom: 32px;">
+                        <label for="smsOtp">SMS Verification Code</label>
+                        <input type="text" id="smsOtp" class="input-modern mono" placeholder="······" maxlength="6" required pattern="[0-9]{6}" style="letter-spacing: 0.5em; text-align: center; font-size: 1.5rem; padding: 20px;">
+                    </div>
+                    
+                    <button type="submit" class="btn-modern btn-modern-primary" style="width: 100%;">
+                        Finalize 2FA & Connect
+                    </button>
+                </form>
+
+                <div class="auth-footer">
+                    <div style="display: flex; align-items: center; gap: 10px; color: var(--text-muted);">
+                        <i class="fa-solid fa-lock" style="color: var(--success);"></i>
+                        <span>End-to-End Encrypted Session</span>
+                    </div>
+                    <a href="/verify.html" class="btn-modern btn-modern-outline" style="width: 100%; justify-content: center; font-size: 0.85rem; padding: 10px;">
+                        <i class="fa-solid fa-file-check"></i> Public Document Verification
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">
+        <i class="fa-solid fa-circle-info" id="toastIcon"></i>
+        <span id="toastMsg"></span>
+    </div>
+
+    <script>
+        const requestOtpForm = document.getElementById('requestOtpForm');
+        const verifyOtpForm = document.getElementById('verifyOtpForm');
+        const verifySmsOtpForm = document.getElementById('verifySmsOtpForm');
+        const emailInput = document.getElementById('email');
+        const nameInput = document.getElementById('name');
+        const otpInput = document.getElementById('otp');
+        const smsOtpInput = document.getElementById('smsOtp');
+        const backBtn = document.getElementById('backBtn');
+        const displayEmail = document.getElementById('displayEmail');
+        const displayMobile = document.getElementById('displayMobile');
+        const toast = document.getElementById('toast');
+        const toastMsg = document.getElementById('toastMsg');
+        const toastIcon = document.getElementById('toastIcon');
+        const dot1 = document.getElementById('dot1');
+        const dot2 = document.getElementById('dot2');
+        const dot3 = document.getElementById('dot3');
+
+        // Check if already logged in
+        if (localStorage.getItem('token')) {
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            window.location.href = user.aadhaar_verified ? '/dashboard.html' : '/aadhaar-verify.html';
+        }
+
+        function showToast(message, type = 'success') {
+            toastMsg.textContent = message;
+            toast.classList.add('show');
+            if (type === 'error') {
+                toast.style.borderColor = 'var(--error)';
+                toastIcon.className = 'fa-solid fa-circle-exclamation';
+                toastIcon.style.color = 'var(--error)';
+            } else {
+                toast.style.borderColor = 'var(--success)';
+                toastIcon.className = 'fa-solid fa-circle-check';
+                toastIcon.style.color = 'var(--success)';
+            }
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 4000);
+        }
+
+        requestOtpForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalHtml = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Initializing...';
+            submitBtn.disabled = true;
+
+            try {
+                const res = await fetch('/api/auth/request-otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: emailInput.value.trim(), name: nameInput.value.trim() })
+                });
+                const data = await res.json();
+                
+                if (res.ok) {
+                    showToast(data.message);
+                    displayEmail.textContent = emailInput.value.trim();
+                    requestOtpForm.style.display = 'none';
+                    verifyOtpForm.style.display = 'block';
+                    dot1.classList.remove('active');
+                    dot1.classList.add('done');
+                    dot2.classList.add('active');
+                    otpInput.focus();
+                } else {
+                    showToast(data.error || 'Error requesting OTP', 'error');
+                }
+            } catch (err) {
+                showToast('Server connection failed', 'error');
+            } finally {
+                submitBtn.innerHTML = originalHtml;
+                submitBtn.disabled = false;
+            }
+        });
+
+        verifyOtpForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalHtml = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Verifying...';
+            submitBtn.disabled = true;
+
+            try {
+                const res = await fetch('/api/auth/verify-otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: emailInput.value.trim(), otp: otpInput.value.trim() })
+                });
+                const data = await res.json();
+                
+                if (res.ok) {
+                    if (data.requires2FA) {
+                        showToast(data.message);
+                        displayMobile.textContent = 'Ending in ' + data.mobileEnding;
+                        verifyOtpForm.style.display = 'none';
+                        verifySmsOtpForm.style.display = 'block';
+                        dot2.classList.remove('active');
+                        dot2.classList.add('done');
+                        dot3.classList.add('active');
+                        smsOtpInput.focus();
+                    } else {
+                        localStorage.setItem('token', data.token);
+                        localStorage.setItem('user', JSON.stringify(data.user));
+                        showToast('Identity verified successfully');
+                        dot2.classList.remove('active');
+                        dot2.classList.add('done');
+                        dot3.classList.add('done');
+                        
+                        setTimeout(() => {
+                            window.location.href = data.user.aadhaar_verified ? '/dashboard.html' : '/aadhaar-verify.html';
+                        }, 800);
+                    }
+                } else {
+                    showToast(data.error || 'Invalid code', 'error');
+                }
+            } catch (err) {
+                showToast('Verification failed', 'error');
+            } finally {
+                submitBtn.innerHTML = originalHtml;
+                submitBtn.disabled = false;
+            }
+        });
+
+        verifySmsOtpForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalHtml = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Finalizing...';
+            submitBtn.disabled = true;
+
+            try {
+                const res = await fetch('/api/auth/verify-2fa', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: emailInput.value.trim(), otp: smsOtpInput.value.trim() })
+                });
+                const data = await res.json();
+                
+                if (res.ok) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    showToast('2FA Identity verified successfully');
+                    dot3.classList.remove('active');
+                    dot3.classList.add('done');
+                    
+                    setTimeout(() => {
+                        window.location.href = data.user.aadhaar_verified ? '/dashboard.html' : '/aadhaar-verify.html';
+                    }, 800);
+                } else {
+                    showToast(data.error || 'Invalid SMS code', 'error');
+                }
+            } catch (err) {
+                showToast('2FA Verification failed', 'error');
+            } finally {
+                submitBtn.innerHTML = originalHtml;
+                submitBtn.disabled = false;
+            }
+        });
+
+        backBtn.addEventListener('click', () => {
+            verifyOtpForm.style.display = 'none';
+            requestOtpForm.style.display = 'block';
+            dot1.classList.remove('done');
+            dot1.classList.add('active');
+            dot2.classList.remove('active');
+            otpInput.value = '';
+        });
+
+        // --- Page Transition Logic ---
+        document.body.classList.remove('fade-out');
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                if (link.href && !link.href.includes('#') && link.target !== '_blank') {
+                    e.preventDefault();
+                    document.body.classList.add('fade-out');
+                    setTimeout(() => window.location = link.href, 400);
+                }
+            });
+        });
+
+        // --- Cursor Spotlight Logic ---
+        document.addEventListener('mousemove', e => {
+            document.querySelectorAll('.spotlight-card').forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+    </script>
+</body>
+</html>

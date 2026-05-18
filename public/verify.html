@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Document | GovSecure</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="/js/theme.js"></script>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 24px;
+        }
+        .verify-card {
+            max-width: 600px;
+            width: 100%;
+            padding: 48px;
+            text-align: center;
+        }
+        .drop-zone {
+            border: 2px dashed var(--border-vibrant);
+            border-radius: var(--radius-xl);
+            padding: 64px 24px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.02);
+            transition: var(--transition-bounce);
+            margin: 32px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .drop-zone:hover, .drop-zone.dragover {
+            border-color: var(--clr-primary);
+            background: var(--clr-primary-glow);
+            transform: scale(1.02);
+        }
+        .result-box {
+            display: none;
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            margin-top: 24px;
+            text-align: left;
+            border: 1px solid transparent;
+            backdrop-filter: blur(10px);
+        }
+        .result-box.success {
+            background: rgba(52, 211, 153, 0.1);
+            border-color: rgba(52, 211, 153, 0.3);
+            color: var(--success);
+            box-shadow: inset 0 0 20px rgba(52, 211, 153, 0.1);
+        }
+        .result-box.error {
+            background: rgba(251, 113, 133, 0.1);
+            border-color: rgba(251, 113, 133, 0.3);
+            color: var(--error);
+            box-shadow: inset 0 0 20px rgba(251, 113, 133, 0.1);
+        }
+    </style>
+</head>
+<body class="page-transition fade-out">
+    <button class="btn-modern-ghost" onclick="toggleTheme()" style="position: fixed; top: 24px; right: 24px; z-index: 100; border-radius: 50%; padding: 12px; background: var(--bg-surface); border: 1px solid var(--border-subtle);">
+        <i class="fa-solid fa-circle-half-stroke"></i>
+    </button>
+
+    <div class="bg-visuals">
+        <div class="mesh-gradient"></div>
+        <div class="noise-overlay"></div>
+        <div class="blob" style="top: 10%; left: -10%;"></div>
+    </div>
+
+    <div class="glass-card spotlight-card verify-card animate-slide-up">
+        <div style="display: flex; justify-content: center; margin-bottom: 24px;">
+            <div class="logo-box" style="width: 56px; height: 56px; border-radius: 16px; font-size: 1.75rem; background: linear-gradient(135deg, var(--clr-primary), var(--clr-accent)); color: white; box-shadow: 0 10px 20px var(--clr-primary-glow);">
+                <i class="fa-solid fa-shield-check"></i>
+            </div>
+        </div>
+        <h2 style="margin-bottom: 16px; font-size: 2rem;">Authenticity Verification</h2>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            Upload an original document to verify its cryptographic signature.
+            <br><span style="color: var(--clr-primary); font-weight: 600; margin-top: 8px; display: inline-block;"><i class="fa-solid fa-lock"></i> Zero-Knowledge Architecture:</span> The file never leaves your device. We compute a cryptographic hash locally.
+        </p>
+
+        <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+            <i class="fa-solid fa-file-shield" style="font-size: 4rem; color: var(--clr-primary); margin-bottom: 24px; filter: drop-shadow(0 0 20px var(--clr-primary-glow));"></i>
+            <h4 style="margin-bottom: 8px; font-size: 1.25rem;">Select or drop a file to verify</h4>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Validates AES-256-GCM secured vault payloads</p>
+            <input type="file" id="fileInput" style="display: none;">
+        </div>
+
+        <div id="loader" style="display: none; margin: 40px 0;">
+            <i class="fa-solid fa-circle-notch fa-spin fa-3x" style="color: var(--clr-primary);"></i>
+            <p style="margin-top: 16px; font-size: 0.9rem; color: var(--text-muted); font-family: 'Geist Mono', monospace;">Computing SHA-256 hash locally...</p>
+        </div>
+
+        <div id="resultBox" class="result-box">
+            <div style="display: flex; align-items: flex-start; gap: 16px;">
+                <div id="resultIcon" style="font-size: 2rem;"></div>
+                <div style="flex: 1;">
+                    <h3 id="resultTitle" style="margin-bottom: 8px; color: var(--text-primary); font-size: 1.2rem;"></h3>
+                    <p id="resultDesc" style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 16px;"></p>
+                    <div id="resultMeta" style="font-size: 0.85rem; background: rgba(0,0,0,0.3); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle); display: none;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 40px;">
+            <a href="/index.html" class="btn-modern btn-modern-ghost"><i class="fa-solid fa-arrow-left"></i> Return to Login</a>
+        </div>
+    </div>
+
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const loader = document.getElementById('loader');
+        const resultBox = document.getElementById('resultBox');
+
+        // Drag & Drop Handlers
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.add('dragover'), false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.remove('dragover'), false);
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            if (files.length) handleFile(files[0]);
+        }, false);
+
+        fileInput.addEventListener('change', function() {
+            if (this.files.length) handleFile(this.files[0]);
+        });
+
+        async function handleFile(file) {
+            dropZone.style.display = 'none';
+            resultBox.style.display = 'none';
+            loader.style.display = 'block';
+
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+                setTimeout(() => verifyHash(hashHex), 800); // Artificial delay for effect
+            } catch (error) {
+                showResult(false, 'Error computing hash. Ensure you are using a modern browser.');
+            }
+        }
+
+        async function verifyHash(hash) {
+            try {
+                const res = await fetch('/api/documents/verify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ hash })
+                });
+                
+                const data = await res.json();
+                
+                if (data.verified) {
+                    showResult(true, 'Cryptographic Match Found', data.document, hash);
+                } else {
+                    showResult(false, 'Verification Failed', null, hash);
+                }
+            } catch (error) {
+                showResult(false, 'Network error while contacting verification servers.');
+            }
+        }
+
+        function showResult(isValid, title, doc = null, hash = '') {
+            loader.style.display = 'none';
+            dropZone.style.display = 'block';
+            resultBox.style.display = 'block';
+            
+            resultBox.className = 'result-box animate-slide-up ' + (isValid ? 'success' : 'error');
+            document.getElementById('resultIcon').innerHTML = isValid ? '<i class="fa-solid fa-badge-check"></i>' : '<i class="fa-solid fa-triangle-exclamation"></i>';
+            document.getElementById('resultTitle').textContent = isValid ? 'Document Verified Authentic' : 'Verification Failed';
+            
+            if (isValid) {
+                document.getElementById('resultDesc').textContent = 'This document exactly matches a secure payload stored in our vault. It has not been tampered with or modified.';
+                document.getElementById('resultMeta').style.display = 'block';
+                document.getElementById('resultMeta').innerHTML = `
+                    <div style="margin-bottom: 8px;"><strong>File Identity:</strong> ${doc.original_name}</div>
+                    <div style="margin-bottom: 8px;"><strong>Classification:</strong> <span class="badge" style="background: rgba(255,255,255,0.1); border:none; padding: 2px 6px;">${doc.category}</span></div>
+                    <div style="margin-bottom: 16px;"><strong>Vault Timestamp:</strong> ${new Date(doc.uploaded_at).toLocaleString()}</div>
+                    <div style="margin-top: 12px; font-family: 'Geist Mono', monospace; font-size: 0.75rem; color: var(--success); word-break: break-all; background: rgba(52, 211, 153, 0.05); padding: 8px; border-radius: 4px;">SHA256: ${hash}</div>
+                `;
+            } else {
+                document.getElementById('resultDesc').textContent = 'This document could not be found in our secure vault, or it has been tampered with. NOTE: Watermarked downloads cannot be verified as their contents have been altered by DRM.';
+                document.getElementById('resultMeta').style.display = 'block';
+                document.getElementById('resultMeta').innerHTML = `
+                    <div style="font-family: 'Geist Mono', monospace; font-size: 0.75rem; color: var(--error); word-break: break-all; background: rgba(251, 113, 133, 0.05); padding: 8px; border-radius: 4px;">Computed Hash: ${hash}</div>
+                `;
+            }
+        }
+
+        // --- Page Transition Logic ---
+        document.body.classList.remove('fade-out');
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                if (link.href && !link.href.includes('#') && link.target !== '_blank') {
+                    e.preventDefault();
+                    document.body.classList.add('fade-out');
+                    setTimeout(() => window.location = link.href, 400);
+                }
+            });
+        });
+
+        // --- Cursor Spotlight Logic ---
+        document.addEventListener('mousemove', e => {
+            document.querySelectorAll('.spotlight-card').forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+    </script>
+</body>
+</html>
