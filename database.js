@@ -69,15 +69,22 @@ const initializeDB = () => {
                 )
             `);
 
-            // Alter users table if needed
+            // Alter users table if needed - Execute sequentially to avoid SQLite locking
             const userColumns = await dbAll(`PRAGMA table_info(users)`);
             const userColumnNames = userColumns.map(r => r.name);
-            if (!userColumnNames.includes('aadhaar_verified')) await dbRun(`ALTER TABLE users ADD COLUMN aadhaar_verified BOOLEAN DEFAULT 0`);
-            if (!userColumnNames.includes('aadhaar_last4')) await dbRun(`ALTER TABLE users ADD COLUMN aadhaar_last4 TEXT`);
-            if (!userColumnNames.includes('aadhaar_hash')) await dbRun(`ALTER TABLE users ADD COLUMN aadhaar_hash TEXT`);
-            if (!userColumnNames.includes('verification_timestamp')) await dbRun(`ALTER TABLE users ADD COLUMN verification_timestamp DATETIME`);
-            if (!userColumnNames.includes('mobile')) await dbRun(`ALTER TABLE users ADD COLUMN mobile TEXT`);
-            if (!userColumnNames.includes('role')) await dbRun(`ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'citizen'`);
+            const userAlterCommands = [
+                { col: 'aadhaar_verified', sql: `ALTER TABLE users ADD COLUMN aadhaar_verified BOOLEAN DEFAULT 0` },
+                { col: 'aadhaar_last4', sql: `ALTER TABLE users ADD COLUMN aadhaar_last4 TEXT` },
+                { col: 'aadhaar_hash', sql: `ALTER TABLE users ADD COLUMN aadhaar_hash TEXT` },
+                { col: 'verification_timestamp', sql: `ALTER TABLE users ADD COLUMN verification_timestamp DATETIME` },
+                { col: 'mobile', sql: `ALTER TABLE users ADD COLUMN mobile TEXT` },
+                { col: 'role', sql: `ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'citizen'` }
+            ];
+            for (const { col, sql } of userAlterCommands) {
+                if (!userColumnNames.includes(col)) {
+                    await dbRun(sql);
+                }
+            }
 
             // Create documents table
             await dbRun(`
@@ -98,14 +105,21 @@ const initializeDB = () => {
                 )
             `);
 
-            // Alter documents table if needed
+            // Alter documents table if needed - Execute sequentially
             const docColumns = await dbAll(`PRAGMA table_info(documents)`);
             const docColumnNames = docColumns.map(r => r.name);
-            if (!docColumnNames.includes('category')) await dbRun(`ALTER TABLE documents ADD COLUMN category TEXT DEFAULT 'Uncategorized'`);
-            if (!docColumnNames.includes('encryption_iv')) await dbRun(`ALTER TABLE documents ADD COLUMN encryption_iv TEXT`);
-            if (!docColumnNames.includes('auth_tag')) await dbRun(`ALTER TABLE documents ADD COLUMN auth_tag TEXT`);
-            if (!docColumnNames.includes('file_hash')) await dbRun(`ALTER TABLE documents ADD COLUMN file_hash TEXT`);
-            if (!docColumnNames.includes('ocr_text')) await dbRun(`ALTER TABLE documents ADD COLUMN ocr_text TEXT`);
+            const docAlterCommands = [
+                { col: 'category', sql: `ALTER TABLE documents ADD COLUMN category TEXT DEFAULT 'Uncategorized'` },
+                { col: 'encryption_iv', sql: `ALTER TABLE documents ADD COLUMN encryption_iv TEXT` },
+                { col: 'auth_tag', sql: `ALTER TABLE documents ADD COLUMN auth_tag TEXT` },
+                { col: 'file_hash', sql: `ALTER TABLE documents ADD COLUMN file_hash TEXT` },
+                { col: 'ocr_text', sql: `ALTER TABLE documents ADD COLUMN ocr_text TEXT` }
+            ];
+            for (const { col, sql } of docAlterCommands) {
+                if (!docColumnNames.includes(col)) {
+                    await dbRun(sql);
+                }
+            }
 
             // Create shares table
             await dbRun(`
@@ -121,10 +135,12 @@ const initializeDB = () => {
                 )
             `);
 
-            // Alter shares table if needed
+            // Alter shares table if needed - Execute sequentially
             const shareColumns = await dbAll(`PRAGMA table_info(shares)`);
             const shareColumnNames = shareColumns.map(r => r.name);
-            if (!shareColumnNames.includes('expires_at')) await dbRun(`ALTER TABLE shares ADD COLUMN expires_at DATETIME`);
+            if (!shareColumnNames.includes('expires_at')) {
+                await dbRun(`ALTER TABLE shares ADD COLUMN expires_at DATETIME`);
+            }
 
             // Create audit_logs table
             await dbRun(`
