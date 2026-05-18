@@ -1,5 +1,0 @@
-.env
-database.sqlite
-uploads/
-.DS_Store
-*.log
