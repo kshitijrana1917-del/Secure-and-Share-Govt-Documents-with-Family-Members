@@ -113,6 +113,7 @@ if (require.main === module) {
         })
         .catch((err) => {
             console.error('[GovSecure] Database initialization failed:', err);
+            console.error('[GovSecure] Stack trace:', err.stack);
             process.exit(1);
         });
 }
