@@ -5,14 +5,17 @@ WORKDIR /usr/src/app
 # Native build tools + curl for health checks
 RUN apt-get update && apt-get install -y python3 make g++ curl && rm -rf /var/lib/apt/lists/*
 
+# Copy package files first
 COPY package*.json ./
+
+# Install dependencies with prebuilt sqlite3 binaries (much faster than --build-from-source)
 RUN npm ci --omit=dev
 
-# Source only (node_modules excluded via .dockerignore)
+# Copy source files
 COPY . .
 
-RUN npm rebuild sqlite3 --build-from-source \
-    && mkdir -p uploads logs data public \
+# Create required directories
+RUN mkdir -p uploads logs data public \
     && chown -R node:node /usr/src/app
 
 # Create a default index.html if it doesn't exist
@@ -30,7 +33,8 @@ USER node
 
 EXPOSE 3000
 
-HEALTHCHECK --interval=5s --timeout=3s --start-period=15s --retries=6 \
+# Extended health check with more retries and longer start period for database init
+HEALTHCHECK --interval=5s --timeout=5s --start-period=30s --retries=10 \
   CMD curl -f http://localhost:3000/health || exit 1
 
 CMD [ "node", "server.js" ]
