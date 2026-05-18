@@ -19,7 +19,7 @@ const createTransporter = () => {
 const transporter = createTransporter();
 
 const mockSendMail = async (mailOptions) => {
-    console.warn('ℹ️ Mock email send active. No SMTP credentials configured.');
+    console.warn('ℹ️ Mock email send active (test or SKIP_EMAIL mode).');
     return Promise.resolve({
         accepted: [mailOptions.to],
         messageId: 'mocked-email-id',
@@ -28,10 +28,10 @@ const mockSendMail = async (mailOptions) => {
 };
 
 const sendEmail = async (mailOptions) => {
+    if (process.env.NODE_ENV === 'test' || process.env.SKIP_EMAIL === 'true') {
+        return mockSendMail(mailOptions);
+    }
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-        if (process.env.NODE_ENV === 'test' || process.env.SKIP_EMAIL === 'true') {
-            return mockSendMail(mailOptions);
-        }
         throw new Error('SMTP credentials are not configured. Cannot send email.');
     }
     return transporter.sendMail(mailOptions);

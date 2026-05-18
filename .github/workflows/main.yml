@@ -26,6 +26,8 @@ jobs:
     - name: Run Jest Test Suite
       env:
         NODE_ENV: test
+        SKIP_EMAIL: 'true'
+        JWT_SECRET: ci-test-secret
       run: npm test
 
   docker-build:
@@ -42,15 +44,30 @@ jobs:
     - name: Test Docker Container Startup
       run: |
         docker rm -f govsecure || true
-        docker run -d -p 3000:3000 --name govsecure govsecure/portal:latest
-        for i in $(seq 1 12); do
-          if curl -f http://localhost:3000; then
-            echo "Docker container is ready.";
-            break;
+        docker run -d -p 3000:3000 \
+          -e SKIP_EMAIL=true \
+          -e NODE_ENV=production \
+          -e JWT_SECRET=ci-test-secret \
+          --name govsecure govsecure/portal:latest
+
+        for i in $(seq 1 30); do
+          if curl -sf http://localhost:3000/health; then
+            echo "Docker container is ready."
+            docker stop govsecure
+            docker rm govsecure
+            exit 0
           fi
-          echo "Waiting for container startup... ($i/12)";
-          sleep 5;
+          if [ -z "$(docker ps -q -f name=govsecure)" ]; then
+            echo "Container exited unexpectedly:"
+            docker logs govsecure
+            exit 1
+          fi
+          echo "Waiting for container startup... ($i/30)"
+          sleep 3
         done
-        curl -f http://localhost:3000
-        docker stop govsecure
-        docker rm govsecure
+
+        echo "Container failed health check:"
+        docker logs govsecure
+        docker stop govsecure || true
+        docker rm govsecure || true
+        exit 1

@@ -1,0 +1,16 @@
+node_modules
+client
+npm-debug.log
+.git
+.github
+.env
+.env.*
+uploads
+logs
+*.log
+database.sqlite
+__tests__
+coverage
+.vscode
+*.md
+test-*.js

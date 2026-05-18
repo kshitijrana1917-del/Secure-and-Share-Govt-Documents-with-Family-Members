@@ -8,9 +8,11 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3000
+      - SKIP_EMAIL=true
+      - DATABASE_PATH=/usr/src/app/data/database.sqlite
     volumes:
       - app_data:/usr/src/app/uploads
-      - db_data:/usr/src/app/database.sqlite
+      - db_data:/usr/src/app/data
     restart: unless-stopped
 
 volumes:

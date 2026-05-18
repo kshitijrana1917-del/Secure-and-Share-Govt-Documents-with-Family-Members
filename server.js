@@ -71,6 +71,11 @@ app.use(helmet({
 }));
 */
 
+// Health check for CI/CD and orchestrators
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'ok' });
+});
+
 // API Routes
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/documents', require('./routes/documentRoutes'));
@@ -93,6 +98,9 @@ if (require.main === module) {
     server.listen(PORT, '0.0.0.0', () => {
         logger.info(`[GovSecure] Engine operational on port ${PORT}`);
         logger.info(`[GovSecure] Local Access: http://localhost:${PORT}`);
+    }).on('error', (err) => {
+        console.error('[GovSecure] Failed to start server:', err);
+        process.exit(1);
     });
 }
 

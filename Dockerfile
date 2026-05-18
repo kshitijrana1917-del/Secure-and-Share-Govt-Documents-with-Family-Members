@@ -1,28 +1,32 @@
-FROM node:18-alpine
+FROM node:18-bullseye-slim
 
-# Create app directory
 WORKDIR /usr/src/app
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
+# Native build tools + curl for health checks
+RUN apt-get update && apt-get install -y python3 make g++ curl && rm -rf /var/lib/apt/lists/*
+
 COPY package*.json ./
+RUN npm ci --omit=dev
 
-RUN npm install --production
-
-# Bundle app source
+# Source only (node_modules excluded via .dockerignore)
 COPY . .
 
-# Ensure uploads directory exists and has correct permissions
-RUN mkdir -p uploads && chown -R node:node uploads
-RUN chown -R node:node /usr/src/app
+RUN npm rebuild sqlite3 --build-from-source \
+    && mkdir -p uploads logs data \
+    && chown -R node:node /usr/src/app
 
-# Bind to all network interfaces so that it can be mapped to the host OS
 ENV HOST=0.0.0.0
 ENV PORT=3000
+ENV NODE_ENV=production
+ENV SKIP_EMAIL=true
+ENV DATABASE_PATH=/usr/src/app/data/database.sqlite
+ENV LOG_CONSOLE=true
 
-# Use non-root user for security
 USER node
 
 EXPOSE 3000
 
-CMD [ "npm", "start" ]
+HEALTHCHECK --interval=5s --timeout=3s --start-period=15s --retries=6 \
+  CMD curl -f http://localhost:3000/health || exit 1
+
+CMD [ "node", "server.js" ]

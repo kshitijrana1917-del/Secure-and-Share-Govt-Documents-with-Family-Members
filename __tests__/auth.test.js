@@ -1,5 +1,10 @@
 const request = require('supertest');
 const app = require('../server');
+const { db } = require('../database');
+
+afterAll((done) => {
+    db.close(done);
+});
 
 describe('Authentication API', () => {
     
