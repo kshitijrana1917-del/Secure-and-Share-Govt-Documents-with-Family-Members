@@ -12,8 +12,13 @@ RUN npm ci --omit=dev
 COPY . .
 
 RUN npm rebuild sqlite3 --build-from-source \
-    && mkdir -p uploads logs data \
+    && mkdir -p uploads logs data public \
     && chown -R node:node /usr/src/app
+
+# Create a default index.html if it doesn't exist
+RUN if [ ! -f public/index.html ]; then \
+      echo '<!DOCTYPE html><html><head><title>GovSecure Portal</title></head><body><h1>GovSecure Portal</h1><p>Backend server is running.</p></body></html>' > public/index.html; \
+    fi
 
 ENV HOST=0.0.0.0
 ENV PORT=3000
