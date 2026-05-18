@@ -1,7 +1,6 @@
 const nodemailer = require('nodemailer');
 
 // Configure Nodemailer transporter
-// It uses environment variables. If they aren't set, it logs a warning.
 const createTransporter = () => {
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
         console.warn("\n⚠️ WARNING: EMAIL_USER or EMAIL_PASS is not set in .env.");
@@ -9,7 +8,7 @@ const createTransporter = () => {
     }
 
     return nodemailer.createTransport({
-        service: 'gmail', // You can change this to 'smtp.mailtrap.io' or other providers
+        service: 'gmail',
         auth: {
             user: process.env.EMAIL_USER,
             pass: process.env.EMAIL_PASS
@@ -19,13 +18,28 @@ const createTransporter = () => {
 
 const transporter = createTransporter();
 
-const sendOTP = async (email, otp, name) => {
-    if (!process.env.EMAIL_USER) {
-        throw new Error("SMTP credentials are not configured. Cannot send email.");
-    }
+const mockSendMail = async (mailOptions) => {
+    console.warn('ℹ️ Mock email send active. No SMTP credentials configured.');
+    return Promise.resolve({
+        accepted: [mailOptions.to],
+        messageId: 'mocked-email-id',
+        response: `Mock email sent to ${mailOptions.to}`
+    });
+};
 
+const sendEmail = async (mailOptions) => {
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+        if (process.env.NODE_ENV === 'test' || process.env.SKIP_EMAIL === 'true') {
+            return mockSendMail(mailOptions);
+        }
+        throw new Error('SMTP credentials are not configured. Cannot send email.');
+    }
+    return transporter.sendMail(mailOptions);
+};
+
+const sendOTP = async (email, otp, name) => {
     const mailOptions = {
-        from: `"GovSecure App" <${process.env.EMAIL_USER}>`,
+        from: `"GovSecure App" <${process.env.EMAIL_USER || 'no-reply@govsecure.test'}>`,
         to: email,
         subject: 'Your GovSecure Login OTP',
         html: `
@@ -44,16 +58,12 @@ const sendOTP = async (email, otp, name) => {
         `
     };
 
-    return await transporter.sendMail(mailOptions);
+    return sendEmail(mailOptions);
 };
 
 const sendAadhaarOTP = async (email, otp, last4) => {
-    if (!process.env.EMAIL_USER) {
-        throw new Error("SMTP credentials are not configured. Cannot send email.");
-    }
-
     const mailOptions = {
-        from: `"GovSecure App" <${process.env.EMAIL_USER}>`,
+        from: `"GovSecure App" <${process.env.EMAIL_USER || 'no-reply@govsecure.test'}>`,
         to: email,
         subject: 'Aadhaar Verification OTP - GovSecure',
         html: `
@@ -73,7 +83,7 @@ const sendAadhaarOTP = async (email, otp, last4) => {
         `
     };
 
-    return await transporter.sendMail(mailOptions);
+    return sendEmail(mailOptions);
 };
 
 module.exports = { sendOTP, sendAadhaarOTP };
