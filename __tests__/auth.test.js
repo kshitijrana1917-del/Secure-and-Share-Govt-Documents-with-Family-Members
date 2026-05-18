@@ -1,6 +1,8 @@
 const request = require('supertest');
+const { db, initializeDB } = require('../database');
 const app = require('../server');
-const { db } = require('../database');
+
+beforeAll(() => initializeDB());
 
 afterAll((done) => {
     db.close(done);

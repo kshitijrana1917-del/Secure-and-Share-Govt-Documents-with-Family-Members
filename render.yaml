@@ -1,5 +1,5 @@
 # Render Blueprint: https://render.com/docs/blueprint-spec
-# Deploy: New → Blueprint → connect this repo → apply (set EMAIL_* in dashboard).
+# Set EMAIL_USER and EMAIL_PASS in the Render dashboard (never commit real values).
 version: "1"
 services:
   - type: web

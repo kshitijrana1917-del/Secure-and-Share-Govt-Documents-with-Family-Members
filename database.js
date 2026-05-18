@@ -2,6 +2,8 @@ const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const fs = require('fs');
 
+const REQUIRED_TABLES = ['users', 'documents', 'shares', 'audit_logs'];
+
 const dbPath = process.env.DATABASE_PATH || path.join(__dirname, 'data', 'database.sqlite');
 
 if (!fs.existsSync(path.dirname(dbPath))) {
@@ -9,10 +11,31 @@ if (!fs.existsSync(path.dirname(dbPath))) {
 }
 const db = new sqlite3.Database(dbPath);
 
+let initPromise = null;
+
+const checkDatabaseHealth = () => {
+    return new Promise((resolve, reject) => {
+        const placeholders = REQUIRED_TABLES.map(() => '?').join(', ');
+        db.get(
+            `SELECT COUNT(*) AS n FROM sqlite_master WHERE type='table' AND name IN (${placeholders})`,
+            REQUIRED_TABLES,
+            (err, row) => {
+                if (err) return reject(err);
+                if (!row || row.n < REQUIRED_TABLES.length) {
+                    return reject(new Error('Database schema not ready'));
+                }
+                resolve(true);
+            }
+        );
+    });
+};
+
 const initializeDB = () => {
-    db.serialize(() => {
-        // Users Table
-        db.run(`
+    if (initPromise) return initPromise;
+
+    initPromise = new Promise((resolve, reject) => {
+        db.serialize(() => {
+            db.run(`
             CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 email TEXT UNIQUE NOT NULL,
@@ -25,20 +48,18 @@ const initializeDB = () => {
             )
         `);
 
-        // Ensure columns exist if table was already created
-        db.all(`PRAGMA table_info(users)`, (err, rows) => {
-            if (err) return console.error(err.message);
-            const existingColumns = rows.map(r => r.name);
-            if (!existingColumns.includes('aadhaar_verified')) db.run(`ALTER TABLE users ADD COLUMN aadhaar_verified BOOLEAN DEFAULT 0`);
-            if (!existingColumns.includes('aadhaar_last4')) db.run(`ALTER TABLE users ADD COLUMN aadhaar_last4 TEXT`);
-            if (!existingColumns.includes('aadhaar_hash')) db.run(`ALTER TABLE users ADD COLUMN aadhaar_hash TEXT`);
-            if (!existingColumns.includes('verification_timestamp')) db.run(`ALTER TABLE users ADD COLUMN verification_timestamp DATETIME`);
-            if (!existingColumns.includes('mobile')) db.run(`ALTER TABLE users ADD COLUMN mobile TEXT`);
-            if (!existingColumns.includes('role')) db.run(`ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'citizen'`);
-        });
+            db.all(`PRAGMA table_info(users)`, (err, rows) => {
+                if (err) return console.error(err.message);
+                const existingColumns = rows.map(r => r.name);
+                if (!existingColumns.includes('aadhaar_verified')) db.run(`ALTER TABLE users ADD COLUMN aadhaar_verified BOOLEAN DEFAULT 0`);
+                if (!existingColumns.includes('aadhaar_last4')) db.run(`ALTER TABLE users ADD COLUMN aadhaar_last4 TEXT`);
+                if (!existingColumns.includes('aadhaar_hash')) db.run(`ALTER TABLE users ADD COLUMN aadhaar_hash TEXT`);
+                if (!existingColumns.includes('verification_timestamp')) db.run(`ALTER TABLE users ADD COLUMN verification_timestamp DATETIME`);
+                if (!existingColumns.includes('mobile')) db.run(`ALTER TABLE users ADD COLUMN mobile TEXT`);
+                if (!existingColumns.includes('role')) db.run(`ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'citizen'`);
+            });
 
-        // Documents Table
-        db.run(`
+            db.run(`
             CREATE TABLE IF NOT EXISTS documents (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 user_id INTEGER NOT NULL,
@@ -56,18 +77,17 @@ const initializeDB = () => {
             )
         `);
 
-        db.all(`PRAGMA table_info(documents)`, (err, rows) => {
-            if (err) return console.error(err.message);
-            const existingColumns = rows.map(r => r.name);
-            if (!existingColumns.includes('category')) db.run(`ALTER TABLE documents ADD COLUMN category TEXT DEFAULT 'Uncategorized'`);
-            if (!existingColumns.includes('encryption_iv')) db.run(`ALTER TABLE documents ADD COLUMN encryption_iv TEXT`);
-            if (!existingColumns.includes('auth_tag')) db.run(`ALTER TABLE documents ADD COLUMN auth_tag TEXT`);
-            if (!existingColumns.includes('file_hash')) db.run(`ALTER TABLE documents ADD COLUMN file_hash TEXT`);
-            if (!existingColumns.includes('ocr_text')) db.run(`ALTER TABLE documents ADD COLUMN ocr_text TEXT`);
-        });
+            db.all(`PRAGMA table_info(documents)`, (err, rows) => {
+                if (err) return console.error(err.message);
+                const existingColumns = rows.map(r => r.name);
+                if (!existingColumns.includes('category')) db.run(`ALTER TABLE documents ADD COLUMN category TEXT DEFAULT 'Uncategorized'`);
+                if (!existingColumns.includes('encryption_iv')) db.run(`ALTER TABLE documents ADD COLUMN encryption_iv TEXT`);
+                if (!existingColumns.includes('auth_tag')) db.run(`ALTER TABLE documents ADD COLUMN auth_tag TEXT`);
+                if (!existingColumns.includes('file_hash')) db.run(`ALTER TABLE documents ADD COLUMN file_hash TEXT`);
+                if (!existingColumns.includes('ocr_text')) db.run(`ALTER TABLE documents ADD COLUMN ocr_text TEXT`);
+            });
 
-        // Shares Table
-        db.run(`
+            db.run(`
             CREATE TABLE IF NOT EXISTS shares (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 document_id INTEGER NOT NULL,
@@ -80,14 +100,13 @@ const initializeDB = () => {
             )
         `);
 
-        db.all(`PRAGMA table_info(shares)`, (err, rows) => {
-            if (err) return console.error(err.message);
-            const existingColumns = rows.map(r => r.name);
-            if (!existingColumns.includes('expires_at')) db.run(`ALTER TABLE shares ADD COLUMN expires_at DATETIME`);
-        });
+            db.all(`PRAGMA table_info(shares)`, (err, rows) => {
+                if (err) return console.error(err.message);
+                const existingColumns = rows.map(r => r.name);
+                if (!existingColumns.includes('expires_at')) db.run(`ALTER TABLE shares ADD COLUMN expires_at DATETIME`);
+            });
 
-        // Audit Logs Table
-        db.run(`
+            db.run(`
             CREATE TABLE IF NOT EXISTS audit_logs (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 user_id INTEGER,
@@ -96,8 +115,14 @@ const initializeDB = () => {
                 timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (user_id) REFERENCES users(id)
             )
-        `);
+        `, (err) => {
+                if (err) return reject(err);
+                checkDatabaseHealth().then(resolve).catch(reject);
+            });
+        });
     });
+
+    return initPromise;
 };
 
 const logAction = (userId, action, details) => {
@@ -110,4 +135,4 @@ const logAction = (userId, action, details) => {
     );
 };
 
-module.exports = { db, initializeDB, logAction };
+module.exports = { db, initializeDB, checkDatabaseHealth, logAction };

@@ -6,7 +6,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const http = require('http');
 const { Server } = require('socket.io');
-const { initializeDB } = require('./database');
+const { initializeDB, checkDatabaseHealth } = require('./database');
 const logger = require('./utils/logger');
 
 const app = express();
@@ -35,9 +35,15 @@ app.use((req, res, next) => {
     next();
 });
 
-// Health check before static files so CI/orchestrators always hit this route
-app.get('/health', (req, res) => {
-    res.status(200).json({ status: 'ok' });
+// Health check before static files; only OK when core tables exist
+app.get('/health', async (req, res) => {
+    try {
+        await checkDatabaseHealth();
+        res.status(200).json({ status: 'ok', database: 'ready' });
+    } catch (err) {
+        logger.error(`Health check failed: ${err.message}`);
+        res.status(503).json({ status: 'degraded', database: 'not ready' });
+    }
 });
 
 // Serve static frontend files
@@ -49,8 +55,8 @@ app.use(express.static(path.join(__dirname, 'public'), {
     }
 }));
 
-// Initialize Database
-initializeDB();
+// Initialize database (awaited before listen in production)
+const dbInitPromise = initializeDB();
 
 // Global Rate Limiting - Disabled for Trae Preview Stability
 // Re-enable for production deployment
@@ -95,13 +101,20 @@ app.get(/.*/, (req, res) => {
 });
 
 if (require.main === module) {
-    server.listen(PORT, '0.0.0.0', () => {
-        logger.info(`[GovSecure] Engine operational on port ${PORT}`);
-        logger.info(`[GovSecure] Local Access: http://localhost:${PORT}`);
-    }).on('error', (err) => {
-        console.error('[GovSecure] Failed to start server:', err);
-        process.exit(1);
-    });
+    dbInitPromise
+        .then(() => {
+            server.listen(PORT, '0.0.0.0', () => {
+                logger.info(`[GovSecure] Engine operational on port ${PORT}`);
+                logger.info(`[GovSecure] Local Access: http://localhost:${PORT}`);
+            }).on('error', (err) => {
+                console.error('[GovSecure] Failed to start server:', err);
+                process.exit(1);
+            });
+        })
+        .catch((err) => {
+            console.error('[GovSecure] Database initialization failed:', err);
+            process.exit(1);
+        });
 }
 
 module.exports = app;
