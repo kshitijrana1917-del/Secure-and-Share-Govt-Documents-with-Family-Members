@@ -43,31 +43,55 @@ jobs:
       
     - name: Test Docker Container Startup
       run: |
-        docker rm -f govsecure || true
-        docker run -d -p 3000:3000 \
+        set -e
+        docker rm -f govsecure 2>/dev/null || true
+
+        if ! docker run -d --name govsecure -p 3000:3000 \
           -e SKIP_EMAIL=true \
           -e NODE_ENV=production \
           -e JWT_SECRET=ci-test-secret \
-          --name govsecure govsecure/portal:latest
+          -e PORT=3000 \
+          govsecure/portal:latest
+        then
+          echo "::error::docker run failed — no container was created (check build output)."
+          exit 1
+        fi
 
-        for i in $(seq 1 30); do
-          if curl -sf http://localhost:3000/health; then
+        cleanup() {
+          docker rm -f govsecure 2>/dev/null || true
+        }
+
+        for i in $(seq 1 40); do
+          if curl -sfS --connect-timeout 2 --max-time 8 "http://127.0.0.1:3000/health" >/dev/null; then
             echo "Docker container is ready."
-            docker stop govsecure
-            docker rm govsecure
+            cleanup
             exit 0
           fi
-          if [ -z "$(docker ps -q -f name=govsecure)" ]; then
-            echo "Container exited unexpectedly:"
-            docker logs govsecure
+
+          if ! docker inspect govsecure >/dev/null 2>&1; then
+            echo "::error::Container govsecure disappeared."
             exit 1
           fi
-          echo "Waiting for container startup... ($i/30)"
-          sleep 3
+
+          status=$(docker inspect -f '{{.State.Status}}' govsecure)
+          if [ "$status" = "exited" ] || [ "$status" = "dead" ]; then
+            echo "::error::Container stopped (status=$status). Logs:"
+            docker logs govsecure 2>&1 || true
+            cleanup
+            exit 1
+          fi
+          if [ "$status" = "restarting" ] && [ "$i" -ge 25 ]; then
+            echo "::error::Container stuck restarting. Logs:"
+            docker logs govsecure 2>&1 || true
+            cleanup
+            exit 1
+          fi
+
+          echo "Waiting for container startup... ($i/40)"
+          sleep 2
         done
 
-        echo "Container failed health check:"
-        docker logs govsecure
-        docker stop govsecure || true
-        docker rm govsecure || true
+        echo "::error::Health check timed out. Logs:"
+        docker logs govsecure 2>&1 || true
+        cleanup
         exit 1

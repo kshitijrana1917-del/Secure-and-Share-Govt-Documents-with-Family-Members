@@ -35,6 +35,11 @@ app.use((req, res, next) => {
     next();
 });
 
+// Health check before static files so CI/orchestrators always hit this route
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'ok' });
+});
+
 // Serve static frontend files
 app.use(express.static(path.join(__dirname, 'public'), {
     setHeaders: (res, path) => {
@@ -70,11 +75,6 @@ app.use(helmet({
     frameguard: false
 }));
 */
-
-// Health check for CI/CD and orchestrators
-app.get('/health', (req, res) => {
-    res.status(200).json({ status: 'ok' });
-});
 
 // API Routes
 app.use('/api/auth', require('./routes/authRoutes'));
