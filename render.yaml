@@ -15,9 +15,9 @@ services:
         value: "true"
       - key: DATABASE_PATH
         value: /usr/src/app/data/database.sqlite
-      - key: 6077908635
+      - key: JWT_SECRET
         generateValue: true
-      - key: kshitijrana1917@gmail.com
+      - key: EMAIL_USER
         sync: false
-      - key: gecugbcfxfxzcluo
+      - key: EMAIL_PASS
         sync: false
