@@ -30,97 +30,122 @@ const checkDatabaseHealth = () => {
     });
 };
 
+// Promisified db.run for better async handling
+const dbRun = (sql, params = []) => {
+    return new Promise((resolve, reject) => {
+        db.run(sql, params, function(err) {
+            if (err) reject(err);
+            else resolve(this);
+        });
+    });
+};
+
+// Promisified db.all for schema checks
+const dbAll = (sql, params = []) => {
+    return new Promise((resolve, reject) => {
+        db.all(sql, params, (err, rows) => {
+            if (err) reject(err);
+            else resolve(rows || []);
+        });
+    });
+};
+
 const initializeDB = () => {
     if (initPromise) return initPromise;
 
-    initPromise = new Promise((resolve, reject) => {
-        db.serialize(() => {
-            db.run(`
-            CREATE TABLE IF NOT EXISTS users (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                email TEXT UNIQUE NOT NULL,
-                name TEXT NOT NULL,
-                role TEXT DEFAULT 'citizen',
-                aadhaar_verified BOOLEAN DEFAULT 0,
-                aadhaar_last4 TEXT,
-                verification_timestamp DATETIME,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            )
-        `);
+    initPromise = (async () => {
+        try {
+            // Create users table
+            await dbRun(`
+                CREATE TABLE IF NOT EXISTS users (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    email TEXT UNIQUE NOT NULL,
+                    name TEXT NOT NULL,
+                    role TEXT DEFAULT 'citizen',
+                    aadhaar_verified BOOLEAN DEFAULT 0,
+                    aadhaar_last4 TEXT,
+                    verification_timestamp DATETIME,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
+            `);
 
-            db.all(`PRAGMA table_info(users)`, (err, rows) => {
-                if (err) return console.error(err.message);
-                const existingColumns = rows.map(r => r.name);
-                if (!existingColumns.includes('aadhaar_verified')) db.run(`ALTER TABLE users ADD COLUMN aadhaar_verified BOOLEAN DEFAULT 0`);
-                if (!existingColumns.includes('aadhaar_last4')) db.run(`ALTER TABLE users ADD COLUMN aadhaar_last4 TEXT`);
-                if (!existingColumns.includes('aadhaar_hash')) db.run(`ALTER TABLE users ADD COLUMN aadhaar_hash TEXT`);
-                if (!existingColumns.includes('verification_timestamp')) db.run(`ALTER TABLE users ADD COLUMN verification_timestamp DATETIME`);
-                if (!existingColumns.includes('mobile')) db.run(`ALTER TABLE users ADD COLUMN mobile TEXT`);
-                if (!existingColumns.includes('role')) db.run(`ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'citizen'`);
-            });
+            // Alter users table if needed
+            const userColumns = await dbAll(`PRAGMA table_info(users)`);
+            const userColumnNames = userColumns.map(r => r.name);
+            if (!userColumnNames.includes('aadhaar_verified')) await dbRun(`ALTER TABLE users ADD COLUMN aadhaar_verified BOOLEAN DEFAULT 0`);
+            if (!userColumnNames.includes('aadhaar_last4')) await dbRun(`ALTER TABLE users ADD COLUMN aadhaar_last4 TEXT`);
+            if (!userColumnNames.includes('aadhaar_hash')) await dbRun(`ALTER TABLE users ADD COLUMN aadhaar_hash TEXT`);
+            if (!userColumnNames.includes('verification_timestamp')) await dbRun(`ALTER TABLE users ADD COLUMN verification_timestamp DATETIME`);
+            if (!userColumnNames.includes('mobile')) await dbRun(`ALTER TABLE users ADD COLUMN mobile TEXT`);
+            if (!userColumnNames.includes('role')) await dbRun(`ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'citizen'`);
 
-            db.run(`
-            CREATE TABLE IF NOT EXISTS documents (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id INTEGER NOT NULL,
-                filename TEXT NOT NULL,
-                original_name TEXT NOT NULL,
-                mimetype TEXT NOT NULL,
-                size INTEGER NOT NULL,
-                category TEXT DEFAULT 'Uncategorized',
-                encryption_iv TEXT,
-                auth_tag TEXT,
-                file_hash TEXT,
-                ocr_text TEXT,
-                uploaded_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (user_id) REFERENCES users(id)
-            )
-        `);
+            // Create documents table
+            await dbRun(`
+                CREATE TABLE IF NOT EXISTS documents (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id INTEGER NOT NULL,
+                    filename TEXT NOT NULL,
+                    original_name TEXT NOT NULL,
+                    mimetype TEXT NOT NULL,
+                    size INTEGER NOT NULL,
+                    category TEXT DEFAULT 'Uncategorized',
+                    encryption_iv TEXT,
+                    auth_tag TEXT,
+                    file_hash TEXT,
+                    ocr_text TEXT,
+                    uploaded_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (user_id) REFERENCES users(id)
+                )
+            `);
 
-            db.all(`PRAGMA table_info(documents)`, (err, rows) => {
-                if (err) return console.error(err.message);
-                const existingColumns = rows.map(r => r.name);
-                if (!existingColumns.includes('category')) db.run(`ALTER TABLE documents ADD COLUMN category TEXT DEFAULT 'Uncategorized'`);
-                if (!existingColumns.includes('encryption_iv')) db.run(`ALTER TABLE documents ADD COLUMN encryption_iv TEXT`);
-                if (!existingColumns.includes('auth_tag')) db.run(`ALTER TABLE documents ADD COLUMN auth_tag TEXT`);
-                if (!existingColumns.includes('file_hash')) db.run(`ALTER TABLE documents ADD COLUMN file_hash TEXT`);
-                if (!existingColumns.includes('ocr_text')) db.run(`ALTER TABLE documents ADD COLUMN ocr_text TEXT`);
-            });
+            // Alter documents table if needed
+            const docColumns = await dbAll(`PRAGMA table_info(documents)`);
+            const docColumnNames = docColumns.map(r => r.name);
+            if (!docColumnNames.includes('category')) await dbRun(`ALTER TABLE documents ADD COLUMN category TEXT DEFAULT 'Uncategorized'`);
+            if (!docColumnNames.includes('encryption_iv')) await dbRun(`ALTER TABLE documents ADD COLUMN encryption_iv TEXT`);
+            if (!docColumnNames.includes('auth_tag')) await dbRun(`ALTER TABLE documents ADD COLUMN auth_tag TEXT`);
+            if (!docColumnNames.includes('file_hash')) await dbRun(`ALTER TABLE documents ADD COLUMN file_hash TEXT`);
+            if (!docColumnNames.includes('ocr_text')) await dbRun(`ALTER TABLE documents ADD COLUMN ocr_text TEXT`);
 
-            db.run(`
-            CREATE TABLE IF NOT EXISTS shares (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                document_id INTEGER NOT NULL,
-                shared_by_user_id INTEGER NOT NULL,
-                shared_with_email TEXT NOT NULL,
-                expires_at DATETIME,
-                shared_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (document_id) REFERENCES documents(id),
-                FOREIGN KEY (shared_by_user_id) REFERENCES users(id)
-            )
-        `);
+            // Create shares table
+            await dbRun(`
+                CREATE TABLE IF NOT EXISTS shares (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    document_id INTEGER NOT NULL,
+                    shared_by_user_id INTEGER NOT NULL,
+                    shared_with_email TEXT NOT NULL,
+                    expires_at DATETIME,
+                    shared_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (document_id) REFERENCES documents(id),
+                    FOREIGN KEY (shared_by_user_id) REFERENCES users(id)
+                )
+            `);
 
-            db.all(`PRAGMA table_info(shares)`, (err, rows) => {
-                if (err) return console.error(err.message);
-                const existingColumns = rows.map(r => r.name);
-                if (!existingColumns.includes('expires_at')) db.run(`ALTER TABLE shares ADD COLUMN expires_at DATETIME`);
-            });
+            // Alter shares table if needed
+            const shareColumns = await dbAll(`PRAGMA table_info(shares)`);
+            const shareColumnNames = shareColumns.map(r => r.name);
+            if (!shareColumnNames.includes('expires_at')) await dbRun(`ALTER TABLE shares ADD COLUMN expires_at DATETIME`);
 
-            db.run(`
-            CREATE TABLE IF NOT EXISTS audit_logs (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id INTEGER,
-                action TEXT NOT NULL,
-                details TEXT,
-                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (user_id) REFERENCES users(id)
-            )
-        `, (err) => {
-                if (err) return reject(err);
-                checkDatabaseHealth().then(resolve).catch(reject);
-            });
-        });
-    });
+            // Create audit_logs table
+            await dbRun(`
+                CREATE TABLE IF NOT EXISTS audit_logs (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id INTEGER,
+                    action TEXT NOT NULL,
+                    details TEXT,
+                    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (user_id) REFERENCES users(id)
+                )
+            `);
+
+            // Verify all tables are ready
+            await checkDatabaseHealth();
+            console.log('[Database] Initialization complete - all tables ready');
+        } catch (err) {
+            console.error('[Database] Initialization failed:', err);
+            throw err;
+        }
+    })();
 
     return initPromise;
 };
