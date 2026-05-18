@@ -1,0 +1,23 @@
+# Render Blueprint: https://render.com/docs/blueprint-spec
+# Deploy: New → Blueprint → connect this repo → apply (set EMAIL_* in dashboard).
+version: "1"
+services:
+  - type: web
+    name: govsecure
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: LOG_CONSOLE
+        value: "true"
+      - key: DATABASE_PATH
+        value: /usr/src/app/data/database.sqlite
+      - key: JWT_SECRET
+        generateValue: true
+      - key: EMAIL_USER
+        sync: false
+      - key: EMAIL_PASS
+        sync: false
