@@ -18,7 +18,6 @@ RUN npm rebuild sqlite3 --build-from-source \
 ENV HOST=0.0.0.0
 ENV PORT=3000
 ENV NODE_ENV=production
-ENV SKIP_EMAIL=true
 ENV DATABASE_PATH=/usr/src/app/data/database.sqlite
 ENV LOG_CONSOLE=true
 
