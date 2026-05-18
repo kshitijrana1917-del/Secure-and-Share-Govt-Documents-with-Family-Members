@@ -1,0 +1,615 @@
+{"level":"info","message":"[GovSecure] Engine operational on port 3000","service":"govsecure-service","timestamp":"2026-05-09 14:32:42"}
+{"level":"info","message":"[GovSecure] Local Access: http://localhost:3000","service":"govsecure-service","timestamp":"2026-05-09 14:32:42"}
+{"level":"info","message":"GET /","service":"govsecure-service","timestamp":"2026-05-09 14:32:48"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-09 14:32:48"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-09 14:32:48"}
+{"level":"info","message":"GET /@vite/client","service":"govsecure-service","timestamp":"2026-05-09 14:32:48"}
+{"level":"info","message":"GET /","service":"govsecure-service","timestamp":"2026-05-09 14:33:07"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-09 14:33:08"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-09 14:33:08"}
+{"level":"info","message":"GET /@vite/client","service":"govsecure-service","timestamp":"2026-05-09 14:33:08"}
+{"level":"info","message":"[GovSecure] Engine operational on port 3000","service":"govsecure-service","timestamp":"2026-05-09 14:33:51"}
+{"level":"info","message":"[GovSecure] Local Access: http://localhost:3000","service":"govsecure-service","timestamp":"2026-05-09 14:33:51"}
+{"level":"info","message":"GET /","service":"govsecure-service","timestamp":"2026-05-09 14:33:57"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-09 14:33:57"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-09 14:33:57"}
+{"level":"info","message":"GET /@vite/client","service":"govsecure-service","timestamp":"2026-05-09 14:33:57"}
+{"level":"info","message":"GET /","service":"govsecure-service","timestamp":"2026-05-09 14:34:06"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-09 14:34:06"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-09 14:34:06"}
+{"level":"info","message":"GET /@vite/client","service":"govsecure-service","timestamp":"2026-05-09 14:34:06"}
+{"level":"info","message":"[GovSecure] Engine operational on port 3000","service":"govsecure-service","timestamp":"2026-05-09 14:34:21"}
+{"level":"info","message":"[GovSecure] Local Access: http://localhost:3000","service":"govsecure-service","timestamp":"2026-05-09 14:34:21"}
+{"level":"info","message":"GET /@vite/client","service":"govsecure-service","timestamp":"2026-05-09 14:34:28"}
+{"level":"info","message":"GET /@vite/client","service":"govsecure-service","timestamp":"2026-05-09 14:34:35"}
+{"level":"info","message":"[GovSecure] Engine operational on port 3000","service":"govsecure-service","timestamp":"2026-05-09 14:34:44"}
+{"level":"info","message":"[GovSecure] Local Access: http://localhost:3000","service":"govsecure-service","timestamp":"2026-05-09 14:34:44"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-09 14:34:51"}
+{"level":"info","message":"GET /@vite/client","service":"govsecure-service","timestamp":"2026-05-09 14:34:51"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-09 14:34:55"}
+{"level":"info","message":"POST /api/auth/request-otp","service":"govsecure-service","timestamp":"2026-05-09 14:35:01"}
+{"level":"info","message":"[GovSecure] Engine operational on port 3000","service":"govsecure-service","timestamp":"2026-05-09 14:35:18"}
+{"level":"info","message":"[GovSecure] Local Access: http://localhost:3000","service":"govsecure-service","timestamp":"2026-05-09 14:35:18"}
+{"level":"info","message":"POST /api/auth/verify-otp","service":"govsecure-service","timestamp":"2026-05-09 14:35:21"}
+{"level":"info","message":"GET /","service":"govsecure-service","timestamp":"2026-05-09 14:35:25"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-09 14:35:25"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-09 14:35:25"}
+{"level":"info","message":"GET /@vite/client","service":"govsecure-service","timestamp":"2026-05-09 14:35:25"}
+{"level":"info","message":"POST /api/auth/verify-otp","service":"govsecure-service","timestamp":"2026-05-09 14:35:36"}
+{"level":"info","message":"[GovSecure] Engine operational on port 3000","service":"govsecure-service","timestamp":"2026-05-09 14:35:43"}
+{"level":"info","message":"[GovSecure] Local Access: http://localhost:3000","service":"govsecure-service","timestamp":"2026-05-09 14:35:43"}
+{"level":"info","message":"GET /","service":"govsecure-service","timestamp":"2026-05-09 14:35:48"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-09 14:35:49"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-09 14:35:49"}
+{"level":"info","message":"GET /@vite/client","service":"govsecure-service","timestamp":"2026-05-09 14:35:49"}
+{"level":"info","message":"[GovSecure] Engine operational on port 3000","service":"govsecure-service","timestamp":"2026-05-09 14:36:06"}
+{"level":"info","message":"[GovSecure] Local Access: http://localhost:3000","service":"govsecure-service","timestamp":"2026-05-09 14:36:06"}
+{"level":"info","message":"POST /api/auth/request-otp","service":"govsecure-service","timestamp":"2026-05-09 14:36:14"}
+{"level":"info","message":"GET /","service":"govsecure-service","timestamp":"2026-05-09 14:36:14"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-09 14:36:14"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-09 14:36:14"}
+{"level":"info","message":"GET /@vite/client","service":"govsecure-service","timestamp":"2026-05-09 14:36:14"}
+{"level":"info","message":"GET /","service":"govsecure-service","timestamp":"2026-05-09 14:36:32"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-09 14:36:32"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-09 14:36:32"}
+{"level":"info","message":"GET /@vite/client","service":"govsecure-service","timestamp":"2026-05-09 14:36:32"}
+{"level":"info","message":"GET /","service":"govsecure-service","timestamp":"2026-05-09 14:36:40"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-09 14:36:40"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-09 14:36:40"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-09 14:36:40"}
+{"level":"info","message":"POST /api/auth/request-otp","service":"govsecure-service","timestamp":"2026-05-09 14:36:45"}
+{"level":"info","message":"POST /api/auth/verify-otp","service":"govsecure-service","timestamp":"2026-05-09 14:36:57"}
+{"level":"info","message":"GET /dashboard.html","service":"govsecure-service","timestamp":"2026-05-09 14:36:58"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-09 14:36:58"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-09 14:36:58"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-09 14:36:58"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-09 14:36:58"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-09 14:36:58"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-09 14:36:58"}
+{"level":"info","message":"GET /api/documents/13/download","service":"govsecure-service","timestamp":"2026-05-09 14:37:03"}
+{"level":"info","message":"GET /api/documents/13/download","service":"govsecure-service","timestamp":"2026-05-09 14:37:04"}
+{"level":"info","message":"GET /api/documents/13/download","service":"govsecure-service","timestamp":"2026-05-09 14:37:05"}
+{"level":"info","message":"GET /api/documents/13/download","service":"govsecure-service","timestamp":"2026-05-09 14:37:06"}
+{"level":"info","message":"GET /api/documents/13/download","service":"govsecure-service","timestamp":"2026-05-09 14:37:06"}
+{"level":"info","message":"GET /api/documents/13/download","service":"govsecure-service","timestamp":"2026-05-09 14:37:06"}
+{"level":"info","message":"GET /api/documents/13/download","service":"govsecure-service","timestamp":"2026-05-09 14:37:06"}
+{"level":"info","message":"GET /api/documents/13/download","service":"govsecure-service","timestamp":"2026-05-09 14:37:06"}
+{"level":"info","message":"GET /api/documents/13/download","service":"govsecure-service","timestamp":"2026-05-09 14:37:07"}
+{"level":"info","message":"GET /api/documents/13/download","service":"govsecure-service","timestamp":"2026-05-09 14:37:07"}
+{"level":"info","message":"GET /api/documents/13/download","service":"govsecure-service","timestamp":"2026-05-09 14:37:07"}
+{"level":"info","message":"GET /api/documents/13/download","service":"govsecure-service","timestamp":"2026-05-09 14:37:07"}
+{"level":"info","message":"GET /api/documents/13/download","service":"govsecure-service","timestamp":"2026-05-09 14:37:07"}
+{"level":"info","message":"GET /api/documents/13/download","service":"govsecure-service","timestamp":"2026-05-09 14:37:07"}
+{"level":"info","message":"DELETE /api/documents/13","service":"govsecure-service","timestamp":"2026-05-09 14:37:10"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-09 14:37:10"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-09 14:37:10"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-09 14:37:10"}
+{"level":"info","message":"GET /api/admin/stats","service":"govsecure-service","timestamp":"2026-05-09 14:37:12"}
+{"level":"info","message":"GET /api/admin/logs","service":"govsecure-service","timestamp":"2026-05-09 14:37:12"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-09 14:37:17"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-09 14:37:20"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-09 14:37:20"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-09 14:37:20"}
+{"level":"info","message":"POST /api/documents/upload","service":"govsecure-service","timestamp":"2026-05-09 14:37:32"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-09 14:37:32"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-09 14:37:32"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-09 14:37:32"}
+{"level":"info","message":"GET /api/documents/14/download","service":"govsecure-service","timestamp":"2026-05-09 14:37:34"}
+{"level":"info","message":"GET /api/documents/14/download","service":"govsecure-service","timestamp":"2026-05-09 14:37:37"}
+{"level":"info","message":"GET /api/documents/14/download","service":"govsecure-service","timestamp":"2026-05-09 14:37:42"}
+{"level":"info","message":"GET /api/documents/10/download","service":"govsecure-service","timestamp":"2026-05-09 14:37:43"}
+{"level":"info","message":"GET /api/documents/14/download","service":"govsecure-service","timestamp":"2026-05-09 14:42:37"}
+{"level":"info","message":"GET /api/documents/14/download","service":"govsecure-service","timestamp":"2026-05-09 14:42:38"}
+{"level":"info","message":"GET /api/documents/14/download","service":"govsecure-service","timestamp":"2026-05-09 14:42:39"}
+{"level":"info","message":"GET /index.html","service":"govsecure-service","timestamp":"2026-05-09 14:50:34"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-09 14:50:35"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-09 14:50:35"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-09 14:50:35"}
+{"level":"info","message":"[GovSecure] Engine operational on port 3000","service":"govsecure-service","timestamp":"2026-05-09 18:27:24"}
+{"level":"info","message":"[GovSecure] Local Access: http://localhost:3000","service":"govsecure-service","timestamp":"2026-05-09 18:27:24"}
+{"level":"info","message":"GET /","service":"govsecure-service","timestamp":"2026-05-09 18:27:30"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-09 18:27:30"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-09 18:27:30"}
+{"level":"info","message":"GET /@vite/client","service":"govsecure-service","timestamp":"2026-05-09 18:27:31"}
+{"level":"info","message":"GET /","service":"govsecure-service","timestamp":"2026-05-09 18:27:31"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-09 18:27:31"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-09 18:27:31"}
+{"level":"info","message":"GET /@vite/client","service":"govsecure-service","timestamp":"2026-05-09 18:27:31"}
+{"level":"info","message":"GET /","service":"govsecure-service","timestamp":"2026-05-09 18:27:33"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-09 18:27:33"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-09 18:27:33"}
+{"level":"info","message":"GET /@vite/client","service":"govsecure-service","timestamp":"2026-05-09 18:27:34"}
+{"level":"info","message":"[GovSecure] Engine operational on port 3000","service":"govsecure-service","timestamp":"2026-05-09 18:27:50"}
+{"level":"info","message":"[GovSecure] Local Access: http://localhost:3000","service":"govsecure-service","timestamp":"2026-05-09 18:27:50"}
+{"level":"info","message":"GET /","service":"govsecure-service","timestamp":"2026-05-09 18:27:58"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-09 18:27:58"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-09 18:27:58"}
+{"level":"info","message":"GET /@vite/client","service":"govsecure-service","timestamp":"2026-05-09 18:27:58"}
+{"level":"info","message":"[GovSecure] Engine operational on port 3000","service":"govsecure-service","timestamp":"2026-05-09 18:28:16"}
+{"level":"info","message":"[GovSecure] Local Access: http://localhost:3000","service":"govsecure-service","timestamp":"2026-05-09 18:28:16"}
+{"level":"info","message":"GET /","service":"govsecure-service","timestamp":"2026-05-09 18:28:23"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-09 18:28:23"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-09 18:28:23"}
+{"level":"info","message":"GET /","service":"govsecure-service","timestamp":"2026-05-09 18:28:23"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-09 18:28:23"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-09 18:28:23"}
+{"level":"info","message":"GET /@vite/client","service":"govsecure-service","timestamp":"2026-05-09 18:28:23"}
+{"level":"info","message":"GET /","service":"govsecure-service","timestamp":"2026-05-09 18:28:45"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-09 18:28:45"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-09 18:28:45"}
+{"level":"info","message":"GET /@vite/client","service":"govsecure-service","timestamp":"2026-05-09 18:28:45"}
+{"level":"info","message":"GET /","service":"govsecure-service","timestamp":"2026-05-09 18:28:51"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-09 18:28:51"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-09 18:28:51"}
+{"level":"info","message":"GET /@vite/client","service":"govsecure-service","timestamp":"2026-05-09 18:28:51"}
+{"level":"info","message":"GET /","service":"govsecure-service","timestamp":"2026-05-09 18:29:02"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-09 18:29:02"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-09 18:29:02"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-09 18:29:02"}
+{"level":"info","message":"POST /api/auth/request-otp","service":"govsecure-service","timestamp":"2026-05-09 18:29:08"}
+{"level":"info","message":"POST /api/auth/verify-otp","service":"govsecure-service","timestamp":"2026-05-09 18:29:20"}
+{"level":"info","message":"GET /dashboard.html","service":"govsecure-service","timestamp":"2026-05-09 18:29:21"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-09 18:29:21"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-09 18:29:21"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-09 18:29:21"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-09 18:29:21"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-09 18:29:21"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-09 18:29:21"}
+{"level":"info","message":"GET /api/documents/14/download","service":"govsecure-service","timestamp":"2026-05-09 18:29:24"}
+{"level":"info","message":"GET /api/documents/14/download","service":"govsecure-service","timestamp":"2026-05-09 18:29:25"}
+{"level":"info","message":"DELETE /api/documents/14","service":"govsecure-service","timestamp":"2026-05-09 18:29:29"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-09 18:29:29"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-09 18:29:29"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-09 18:29:29"}
+{"level":"info","message":"POST /api/documents/upload","service":"govsecure-service","timestamp":"2026-05-09 18:29:53"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-09 18:29:54"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-09 18:29:54"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-09 18:29:54"}
+{"level":"info","message":"GET /api/documents/15/download","service":"govsecure-service","timestamp":"2026-05-09 18:29:57"}
+{"level":"info","message":"POST /api/documents/upload","service":"govsecure-service","timestamp":"2026-05-09 18:30:17"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-09 18:30:18"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-09 18:30:18"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-09 18:30:18"}
+{"level":"info","message":"GET /api/documents/16/download","service":"govsecure-service","timestamp":"2026-05-09 18:30:19"}
+{"level":"info","message":"DELETE /api/documents/16","service":"govsecure-service","timestamp":"2026-05-09 18:30:26"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-09 18:30:27"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-09 18:30:27"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-09 18:30:27"}
+{"level":"info","message":"POST /api/documents/upload","service":"govsecure-service","timestamp":"2026-05-09 18:30:37"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-09 18:30:37"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-09 18:30:37"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-09 18:30:37"}
+{"level":"info","message":"GET /api/documents/17/download","service":"govsecure-service","timestamp":"2026-05-09 18:30:39"}
+{"level":"info","message":"GET /api/admin/stats","service":"govsecure-service","timestamp":"2026-05-09 18:30:47"}
+{"level":"info","message":"GET /api/admin/logs","service":"govsecure-service","timestamp":"2026-05-09 18:30:47"}
+{"level":"info","message":"GET /index.html","service":"govsecure-service","timestamp":"2026-05-09 18:30:52"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-09 18:30:52"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-09 18:30:52"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-09 18:30:52"}
+{"level":"info","message":"GET /verify.html","service":"govsecure-service","timestamp":"2026-05-09 18:31:04"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-09 18:31:04"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-09 18:31:05"}
+{"level":"info","message":"POST /api/documents/verify","service":"govsecure-service","timestamp":"2026-05-09 18:31:12"}
+{"level":"info","message":"GET /index.html","service":"govsecure-service","timestamp":"2026-05-09 18:31:15"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-09 18:31:15"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-09 18:31:15"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-09 18:31:16"}
+{"level":"info","message":"[GovSecure] Engine operational on port 3000","service":"govsecure-service","timestamp":"2026-05-11 15:09:19"}
+{"level":"info","message":"[GovSecure] Local Access: http://localhost:3000","service":"govsecure-service","timestamp":"2026-05-11 15:09:19"}
+{"level":"info","message":"GET /","service":"govsecure-service","timestamp":"2026-05-11 15:09:31"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-11 15:09:31"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-11 15:09:31"}
+{"level":"info","message":"GET /@vite/client","service":"govsecure-service","timestamp":"2026-05-11 15:09:31"}
+{"level":"info","message":"GET /","service":"govsecure-service","timestamp":"2026-05-11 15:10:45"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-11 15:10:45"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-11 15:10:45"}
+{"level":"info","message":"GET /@vite/client","service":"govsecure-service","timestamp":"2026-05-11 15:10:45"}
+{"level":"info","message":"GET /","service":"govsecure-service","timestamp":"2026-05-11 15:10:54"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-11 15:10:54"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-11 15:10:54"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-11 15:10:55"}
+{"level":"info","message":"POST /api/auth/request-otp","service":"govsecure-service","timestamp":"2026-05-11 15:11:02"}
+{"level":"info","message":"POST /api/auth/verify-otp","service":"govsecure-service","timestamp":"2026-05-11 15:11:17"}
+{"level":"info","message":"GET /dashboard.html","service":"govsecure-service","timestamp":"2026-05-11 15:11:18"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-11 15:11:18"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-11 15:11:18"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-11 15:11:18"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-11 15:11:18"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-11 15:11:18"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-11 15:11:18"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-11 15:11:30"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-11 15:11:35"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-11 15:11:35"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-11 15:11:35"}
+{"level":"info","message":"GET /api/admin/logs","service":"govsecure-service","timestamp":"2026-05-11 15:11:38"}
+{"level":"info","message":"GET /api/admin/stats","service":"govsecure-service","timestamp":"2026-05-11 15:11:38"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-11 15:11:57"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-11 15:11:59"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-11 15:11:59"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-11 15:11:59"}
+{"level":"info","message":"GET /api/documents/17/download","service":"govsecure-service","timestamp":"2026-05-11 15:12:02"}
+{"level":"info","message":"GET /api/documents/15/download","service":"govsecure-service","timestamp":"2026-05-11 15:12:10"}
+{"level":"info","message":"GET /api/documents/17/download","service":"govsecure-service","timestamp":"2026-05-11 15:12:32"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-11 15:12:50"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-11 15:12:50"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-11 15:12:50"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-11 15:12:51"}
+{"level":"info","message":"GET /api/admin/stats","service":"govsecure-service","timestamp":"2026-05-11 15:12:53"}
+{"level":"info","message":"GET /api/admin/logs","service":"govsecure-service","timestamp":"2026-05-11 15:12:53"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-11 15:12:59"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-11 15:12:59"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-11 15:12:59"}
+{"level":"info","message":"GET /index.html","service":"govsecure-service","timestamp":"2026-05-11 15:15:31"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-11 15:15:31"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-11 15:15:31"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-11 15:15:32"}
+{"level":"info","message":"GET /index.html","service":"govsecure-service","timestamp":"2026-05-11 15:15:50"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-11 15:15:50"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-11 15:15:50"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-11 15:15:50"}
+{"level":"info","message":"GET /index.html","service":"govsecure-service","timestamp":"2026-05-11 15:15:52"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-11 15:15:52"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-11 15:15:52"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-11 15:15:52"}
+{"level":"info","message":"GET /index.html","service":"govsecure-service","timestamp":"2026-05-11 15:17:06"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-11 15:17:07"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-11 15:17:07"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-11 15:17:07"}
+{"level":"info","message":"POST /api/auth/request-otp","service":"govsecure-service","timestamp":"2026-05-11 15:17:35"}
+{"level":"info","message":"POST /api/auth/verify-otp","service":"govsecure-service","timestamp":"2026-05-11 15:18:03"}
+{"level":"info","message":"GET /dashboard.html","service":"govsecure-service","timestamp":"2026-05-11 15:18:04"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-11 15:18:04"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-11 15:18:04"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-11 15:18:04"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-11 15:18:04"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-11 15:18:04"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-11 15:18:04"}
+{"level":"info","message":"GET /api/documents/17/download","service":"govsecure-service","timestamp":"2026-05-11 15:19:33"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-11 15:19:41"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-11 15:20:03"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-11 15:20:14"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-11 15:20:15"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-11 15:20:16"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-11 15:20:16"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-11 15:20:16"}
+{"level":"info","message":"GET /api/admin/logs","service":"govsecure-service","timestamp":"2026-05-11 15:22:24"}
+{"level":"info","message":"GET /api/admin/stats","service":"govsecure-service","timestamp":"2026-05-11 15:22:24"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-11 15:22:26"}
+{"level":"info","message":"GET /api/admin/stats","service":"govsecure-service","timestamp":"2026-05-11 15:22:28"}
+{"level":"info","message":"GET /api/admin/logs","service":"govsecure-service","timestamp":"2026-05-11 15:22:28"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-11 15:22:31"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-11 15:22:32"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-11 15:22:32"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-11 15:22:32"}
+{"level":"info","message":"GET /dashboard.html","service":"govsecure-service","timestamp":"2026-05-11 15:25:01"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-11 15:25:01"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-11 15:25:01"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-11 15:25:02"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-11 15:25:02"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-11 15:25:02"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-11 15:25:03"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-11 15:25:07"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-11 15:25:07"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-11 15:25:07"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-11 15:25:25"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-11 15:25:31"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-11 15:25:31"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-11 15:25:31"}
+{"level":"info","message":"GET /api/admin/stats","service":"govsecure-service","timestamp":"2026-05-11 15:25:34"}
+{"level":"info","message":"GET /api/admin/logs","service":"govsecure-service","timestamp":"2026-05-11 15:25:34"}
+{"level":"info","message":"GET /api/admin/stats","service":"govsecure-service","timestamp":"2026-05-11 15:25:39"}
+{"level":"info","message":"GET /api/admin/logs","service":"govsecure-service","timestamp":"2026-05-11 15:25:39"}
+{"level":"info","message":"GET /dashboard.html","service":"govsecure-service","timestamp":"2026-05-11 15:26:29"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-11 15:26:29"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-11 15:26:29"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-11 15:26:30"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-11 15:26:30"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-11 15:26:30"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-11 15:26:30"}
+{"level":"info","message":"GET /api/admin/stats","service":"govsecure-service","timestamp":"2026-05-11 15:26:33"}
+{"level":"info","message":"GET /api/admin/logs","service":"govsecure-service","timestamp":"2026-05-11 15:26:33"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-11 15:26:58"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-11 15:26:58"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-11 15:26:58"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-11 15:27:00"}
+{"level":"info","message":"GET /api/admin/stats","service":"govsecure-service","timestamp":"2026-05-11 15:27:02"}
+{"level":"info","message":"GET /api/admin/logs","service":"govsecure-service","timestamp":"2026-05-11 15:27:02"}
+{"level":"info","message":"[GovSecure] Engine operational on port 3000","service":"govsecure-service","timestamp":"2026-05-13 13:52:07"}
+{"level":"info","message":"[GovSecure] Local Access: http://localhost:3000","service":"govsecure-service","timestamp":"2026-05-13 13:52:07"}
+{"level":"info","message":"GET /","service":"govsecure-service","timestamp":"2026-05-13 13:52:48"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-13 13:52:48"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-13 13:52:48"}
+{"level":"info","message":"GET /dashboard.html","service":"govsecure-service","timestamp":"2026-05-13 13:52:48"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-13 13:52:48"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-13 13:52:48"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-13 13:52:49"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-13 13:52:49"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-13 13:52:49"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-13 13:52:49"}
+{"level":"info","message":"GET /index.html","service":"govsecure-service","timestamp":"2026-05-13 13:52:54"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-13 13:52:54"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-13 13:52:54"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-13 13:52:54"}
+{"level":"info","message":"POST /api/auth/request-otp","service":"govsecure-service","timestamp":"2026-05-13 13:53:00"}
+{"level":"info","message":"POST /api/auth/verify-otp","service":"govsecure-service","timestamp":"2026-05-13 13:53:17"}
+{"level":"info","message":"GET /dashboard.html","service":"govsecure-service","timestamp":"2026-05-13 13:53:18"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-13 13:53:18"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-13 13:53:18"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-13 13:53:18"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-13 13:53:18"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-13 13:53:18"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-13 13:53:18"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-13 15:41:29"}
+{"level":"error","message":"TypeError: Cannot read properties of undefined (reading '0')\n    at C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\routes\\shareRoutes.js:62:60\n    at Layer.handleRequest (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\route.js:157:13)\n    at Statement.<anonymous> (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\middleware\\auth.js:33:13)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)","service":"govsecure-service","timestamp":"2026-05-13 15:41:29"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-13 15:41:34"}
+{"level":"error","message":"TypeError: Cannot read properties of undefined (reading '0')\n    at C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\routes\\shareRoutes.js:62:60\n    at Layer.handleRequest (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\route.js:157:13)\n    at Statement.<anonymous> (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\middleware\\auth.js:33:13)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)","service":"govsecure-service","timestamp":"2026-05-13 15:41:34"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-13 15:41:43"}
+{"level":"error","message":"TypeError: Cannot read properties of undefined (reading '0')\n    at C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\routes\\shareRoutes.js:62:60\n    at Layer.handleRequest (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\route.js:157:13)\n    at Statement.<anonymous> (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\middleware\\auth.js:33:13)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)","service":"govsecure-service","timestamp":"2026-05-13 15:41:43"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-13 15:41:43"}
+{"level":"error","message":"TypeError: Cannot read properties of undefined (reading '0')\n    at C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\routes\\shareRoutes.js:62:60\n    at Layer.handleRequest (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\route.js:157:13)\n    at Statement.<anonymous> (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\middleware\\auth.js:33:13)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)","service":"govsecure-service","timestamp":"2026-05-13 15:41:43"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-13 15:41:43"}
+{"level":"error","message":"TypeError: Cannot read properties of undefined (reading '0')\n    at C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\routes\\shareRoutes.js:62:60\n    at Layer.handleRequest (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\route.js:157:13)\n    at Statement.<anonymous> (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\middleware\\auth.js:33:13)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)","service":"govsecure-service","timestamp":"2026-05-13 15:41:43"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-13 15:41:43"}
+{"level":"error","message":"TypeError: Cannot read properties of undefined (reading '0')\n    at C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\routes\\shareRoutes.js:62:60\n    at Layer.handleRequest (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\route.js:157:13)\n    at Statement.<anonymous> (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\middleware\\auth.js:33:13)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)","service":"govsecure-service","timestamp":"2026-05-13 15:41:43"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-13 15:41:44"}
+{"level":"error","message":"TypeError: Cannot read properties of undefined (reading '0')\n    at C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\routes\\shareRoutes.js:62:60\n    at Layer.handleRequest (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\route.js:157:13)\n    at Statement.<anonymous> (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\middleware\\auth.js:33:13)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)","service":"govsecure-service","timestamp":"2026-05-13 15:41:44"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-13 15:41:44"}
+{"level":"error","message":"TypeError: Cannot read properties of undefined (reading '0')\n    at C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\routes\\shareRoutes.js:62:60\n    at Layer.handleRequest (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\route.js:157:13)\n    at Statement.<anonymous> (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\middleware\\auth.js:33:13)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)","service":"govsecure-service","timestamp":"2026-05-13 15:41:44"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-13 15:41:44"}
+{"level":"error","message":"TypeError: Cannot read properties of undefined (reading '0')\n    at C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\routes\\shareRoutes.js:62:60\n    at Layer.handleRequest (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\route.js:157:13)\n    at Statement.<anonymous> (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\middleware\\auth.js:33:13)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)","service":"govsecure-service","timestamp":"2026-05-13 15:41:44"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-13 15:41:44"}
+{"level":"error","message":"TypeError: Cannot read properties of undefined (reading '0')\n    at C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\routes\\shareRoutes.js:62:60\n    at Layer.handleRequest (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\route.js:157:13)\n    at Statement.<anonymous> (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\middleware\\auth.js:33:13)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)","service":"govsecure-service","timestamp":"2026-05-13 15:41:44"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-13 15:41:44"}
+{"level":"error","message":"TypeError: Cannot read properties of undefined (reading '0')\n    at C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\routes\\shareRoutes.js:62:60\n    at Layer.handleRequest (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\route.js:157:13)\n    at Statement.<anonymous> (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\middleware\\auth.js:33:13)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)","service":"govsecure-service","timestamp":"2026-05-13 15:41:44"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-13 15:41:45"}
+{"level":"error","message":"TypeError: Cannot read properties of undefined (reading '0')\n    at C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\routes\\shareRoutes.js:62:60\n    at Layer.handleRequest (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\route.js:157:13)\n    at Statement.<anonymous> (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\middleware\\auth.js:33:13)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)","service":"govsecure-service","timestamp":"2026-05-13 15:41:45"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-13 15:41:45"}
+{"level":"error","message":"TypeError: Cannot read properties of undefined (reading '0')\n    at C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\routes\\shareRoutes.js:62:60\n    at Layer.handleRequest (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\route.js:157:13)\n    at Statement.<anonymous> (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\middleware\\auth.js:33:13)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)","service":"govsecure-service","timestamp":"2026-05-13 15:41:45"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-13 15:41:45"}
+{"level":"error","message":"TypeError: Cannot read properties of undefined (reading '0')\n    at C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\routes\\shareRoutes.js:62:60\n    at Layer.handleRequest (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\route.js:157:13)\n    at Statement.<anonymous> (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\middleware\\auth.js:33:13)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)","service":"govsecure-service","timestamp":"2026-05-13 15:41:45"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-13 15:41:45"}
+{"level":"error","message":"TypeError: Cannot read properties of undefined (reading '0')\n    at C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\routes\\shareRoutes.js:62:60\n    at Layer.handleRequest (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\route.js:157:13)\n    at Statement.<anonymous> (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\middleware\\auth.js:33:13)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)","service":"govsecure-service","timestamp":"2026-05-13 15:41:45"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-13 15:41:45"}
+{"level":"error","message":"TypeError: Cannot read properties of undefined (reading '0')\n    at C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\routes\\shareRoutes.js:62:60\n    at Layer.handleRequest (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\route.js:157:13)\n    at Statement.<anonymous> (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\middleware\\auth.js:33:13)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)","service":"govsecure-service","timestamp":"2026-05-13 15:41:45"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-13 15:41:46"}
+{"level":"error","message":"TypeError: Cannot read properties of undefined (reading '0')\n    at C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\routes\\shareRoutes.js:62:60\n    at Layer.handleRequest (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\route.js:157:13)\n    at Statement.<anonymous> (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\middleware\\auth.js:33:13)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)","service":"govsecure-service","timestamp":"2026-05-13 15:41:46"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-13 15:41:46"}
+{"level":"error","message":"TypeError: Cannot read properties of undefined (reading '0')\n    at C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\routes\\shareRoutes.js:62:60\n    at Layer.handleRequest (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\route.js:157:13)\n    at Statement.<anonymous> (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\middleware\\auth.js:33:13)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)","service":"govsecure-service","timestamp":"2026-05-13 15:41:46"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-13 15:41:57"}
+{"level":"error","message":"TypeError: Cannot read properties of undefined (reading '0')\n    at C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\routes\\shareRoutes.js:62:60\n    at Layer.handleRequest (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\route.js:157:13)\n    at Statement.<anonymous> (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\middleware\\auth.js:33:13)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)","service":"govsecure-service","timestamp":"2026-05-13 15:41:57"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-13 15:41:58"}
+{"level":"error","message":"TypeError: Cannot read properties of undefined (reading '0')\n    at C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\routes\\shareRoutes.js:62:60\n    at Layer.handleRequest (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\route.js:157:13)\n    at Statement.<anonymous> (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\middleware\\auth.js:33:13)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)","service":"govsecure-service","timestamp":"2026-05-13 15:41:58"}
+{"level":"info","message":"GET /dashboard.html","service":"govsecure-service","timestamp":"2026-05-13 15:42:05"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-13 15:42:05"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-13 15:42:05"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-13 15:42:05"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-13 15:42:06"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-13 15:42:06"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-13 15:42:06"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-13 15:42:18"}
+{"level":"error","message":"TypeError: Cannot read properties of undefined (reading '0')\n    at C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\routes\\shareRoutes.js:62:60\n    at Layer.handleRequest (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\route.js:157:13)\n    at Statement.<anonymous> (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\middleware\\auth.js:33:13)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)","service":"govsecure-service","timestamp":"2026-05-13 15:42:18"}
+{"level":"info","message":"[GovSecure] Engine operational on port 3000","service":"govsecure-service","timestamp":"2026-05-17 19:37:59"}
+{"level":"info","message":"[GovSecure] Local Access: http://localhost:3000","service":"govsecure-service","timestamp":"2026-05-17 19:37:59"}
+{"level":"info","message":"GET /","service":"govsecure-service","timestamp":"2026-05-17 19:38:46"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-17 19:38:46"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-17 19:38:46"}
+{"level":"info","message":"GET /dashboard.html","service":"govsecure-service","timestamp":"2026-05-17 19:38:46"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-17 19:38:47"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-17 19:38:47"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-17 19:38:47"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-17 19:38:47"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-17 19:38:47"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-17 19:38:48"}
+{"level":"info","message":"GET /index.html","service":"govsecure-service","timestamp":"2026-05-17 19:38:51"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-17 19:38:51"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-17 19:38:51"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-17 19:38:51"}
+{"level":"info","message":"GET /verify.html","service":"govsecure-service","timestamp":"2026-05-17 19:39:09"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-17 19:39:09"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-17 19:39:09"}
+{"level":"info","message":"GET /index.html","service":"govsecure-service","timestamp":"2026-05-17 19:39:13"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-17 19:39:13"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-17 19:39:13"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-17 19:39:13"}
+{"level":"info","message":"POST /api/auth/request-otp","service":"govsecure-service","timestamp":"2026-05-17 19:40:09"}
+{"level":"info","message":"POST /api/auth/verify-otp","service":"govsecure-service","timestamp":"2026-05-17 19:40:32"}
+{"level":"info","message":"GET /dashboard.html","service":"govsecure-service","timestamp":"2026-05-17 19:40:33"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-17 19:40:33"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-17 19:40:33"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-17 19:40:33"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-17 19:40:33"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-17 19:40:33"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-17 19:40:33"}
+{"level":"info","message":"GET /api/documents/15/download","service":"govsecure-service","timestamp":"2026-05-17 19:40:38"}
+{"level":"info","message":"GET /api/admin/stats","service":"govsecure-service","timestamp":"2026-05-17 19:40:53"}
+{"level":"info","message":"GET /api/admin/logs","service":"govsecure-service","timestamp":"2026-05-17 19:40:53"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-17 19:40:59"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-17 19:41:04"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-17 19:41:04"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-17 19:41:04"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-17 19:41:42"}
+{"level":"error","message":"TypeError: Cannot read properties of undefined (reading '0')\n    at C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\routes\\shareRoutes.js:62:60\n    at Layer.handleRequest (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\route.js:157:13)\n    at Statement.<anonymous> (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\middleware\\auth.js:33:13)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)","service":"govsecure-service","timestamp":"2026-05-17 19:41:42"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-17 19:41:44"}
+{"level":"error","message":"TypeError: Cannot read properties of undefined (reading '0')\n    at C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\routes\\shareRoutes.js:62:60\n    at Layer.handleRequest (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\route.js:157:13)\n    at Statement.<anonymous> (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\middleware\\auth.js:33:13)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)","service":"govsecure-service","timestamp":"2026-05-17 19:41:44"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-17 19:41:45"}
+{"level":"error","message":"TypeError: Cannot read properties of undefined (reading '0')\n    at C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\routes\\shareRoutes.js:62:60\n    at Layer.handleRequest (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\route.js:157:13)\n    at Statement.<anonymous> (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\middleware\\auth.js:33:13)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)","service":"govsecure-service","timestamp":"2026-05-17 19:41:45"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-17 19:41:45"}
+{"level":"error","message":"TypeError: Cannot read properties of undefined (reading '0')\n    at C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\routes\\shareRoutes.js:62:60\n    at Layer.handleRequest (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\route.js:157:13)\n    at Statement.<anonymous> (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\middleware\\auth.js:33:13)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)","service":"govsecure-service","timestamp":"2026-05-17 19:41:45"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-17 19:41:45"}
+{"level":"error","message":"TypeError: Cannot read properties of undefined (reading '0')\n    at C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\routes\\shareRoutes.js:62:60\n    at Layer.handleRequest (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\route.js:157:13)\n    at Statement.<anonymous> (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\middleware\\auth.js:33:13)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)","service":"govsecure-service","timestamp":"2026-05-17 19:41:45"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-17 19:41:46"}
+{"level":"error","message":"TypeError: Cannot read properties of undefined (reading '0')\n    at C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\routes\\shareRoutes.js:62:60\n    at Layer.handleRequest (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\route.js:157:13)\n    at Statement.<anonymous> (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\middleware\\auth.js:33:13)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)","service":"govsecure-service","timestamp":"2026-05-17 19:41:46"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-17 19:41:46"}
+{"level":"error","message":"TypeError: Cannot read properties of undefined (reading '0')\n    at C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\routes\\shareRoutes.js:62:60\n    at Layer.handleRequest (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\route.js:157:13)\n    at Statement.<anonymous> (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\middleware\\auth.js:33:13)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)","service":"govsecure-service","timestamp":"2026-05-17 19:41:46"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-17 19:41:46"}
+{"level":"error","message":"TypeError: Cannot read properties of undefined (reading '0')\n    at C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\routes\\shareRoutes.js:62:60\n    at Layer.handleRequest (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\route.js:157:13)\n    at Statement.<anonymous> (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\middleware\\auth.js:33:13)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)","service":"govsecure-service","timestamp":"2026-05-17 19:41:46"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-17 19:41:46"}
+{"level":"error","message":"TypeError: Cannot read properties of undefined (reading '0')\n    at C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\routes\\shareRoutes.js:62:60\n    at Layer.handleRequest (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\route.js:157:13)\n    at Statement.<anonymous> (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\middleware\\auth.js:33:13)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)","service":"govsecure-service","timestamp":"2026-05-17 19:41:46"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-17 19:41:46"}
+{"level":"error","message":"TypeError: Cannot read properties of undefined (reading '0')\n    at C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\routes\\shareRoutes.js:62:60\n    at Layer.handleRequest (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\route.js:157:13)\n    at Statement.<anonymous> (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\middleware\\auth.js:33:13)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)","service":"govsecure-service","timestamp":"2026-05-17 19:41:46"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-17 19:41:46"}
+{"level":"error","message":"TypeError: Cannot read properties of undefined (reading '0')\n    at C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\routes\\shareRoutes.js:62:60\n    at Layer.handleRequest (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\layer.js:152:17)\n    at next (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\router\\lib\\route.js:157:13)\n    at Statement.<anonymous> (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\middleware\\auth.js:33:13)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)\n    at Statement.replacement (C:\\Users\\kshit\\Downloads\\Govt Secured Documents\\node_modules\\sqlite3\\lib\\trace.js:25:27)","service":"govsecure-service","timestamp":"2026-05-17 19:41:46"}
+{"level":"info","message":"GET /index.html","service":"govsecure-service","timestamp":"2026-05-17 19:41:57"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-17 19:41:57"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-17 19:41:57"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-17 19:41:58"}
+{"level":"info","message":"[GovSecure] Engine operational on port 3000","service":"govsecure-service","timestamp":"2026-05-17 19:48:08"}
+{"level":"info","message":"[GovSecure] Local Access: http://localhost:3000","service":"govsecure-service","timestamp":"2026-05-17 19:48:08"}
+{"level":"info","message":"POST /api/auth/request-otp","service":"govsecure-service","timestamp":"2026-05-17 19:49:40"}
+{"level":"info","message":"POST /api/auth/verify-otp","service":"govsecure-service","timestamp":"2026-05-17 19:49:58"}
+{"level":"info","message":"GET /dashboard.html","service":"govsecure-service","timestamp":"2026-05-17 19:49:59"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-17 19:49:59"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-17 19:49:59"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-17 19:49:59"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-17 19:49:59"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-17 19:49:59"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-17 19:50:00"}
+{"level":"info","message":"POST /api/shares","service":"govsecure-service","timestamp":"2026-05-17 19:50:09"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-17 19:50:09"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-17 19:50:09"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-17 19:50:09"}
+{"level":"info","message":"GET /index.html","service":"govsecure-service","timestamp":"2026-05-17 19:50:18"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-17 19:50:18"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-17 19:50:18"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-17 19:50:19"}
+{"level":"info","message":"POST /api/auth/request-otp","service":"govsecure-service","timestamp":"2026-05-17 19:50:29"}
+{"level":"info","message":"POST /api/auth/verify-otp","service":"govsecure-service","timestamp":"2026-05-17 19:50:48"}
+{"level":"info","message":"GET /dashboard.html","service":"govsecure-service","timestamp":"2026-05-17 19:50:49"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-17 19:50:49"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-17 19:50:49"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-17 19:50:49"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-17 19:50:49"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-17 19:50:49"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-17 19:50:49"}
+{"level":"info","message":"GET /index.html","service":"govsecure-service","timestamp":"2026-05-17 19:50:55"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-17 19:50:55"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-17 19:50:55"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-17 19:50:55"}
+{"level":"info","message":"[GovSecure] Engine operational on port 3000","service":"govsecure-service","timestamp":"2026-05-17 20:12:05"}
+{"level":"info","message":"[GovSecure] Local Access: http://localhost:3000","service":"govsecure-service","timestamp":"2026-05-17 20:12:05"}
+{"level":"info","message":"GET /","service":"govsecure-service","timestamp":"2026-05-17 20:12:54"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-17 20:12:54"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-17 20:12:54"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-17 20:12:56"}
+{"level":"info","message":"POST /api/auth/request-otp","service":"govsecure-service","timestamp":"2026-05-17 20:13:18"}
+{"level":"info","message":"POST /api/auth/verify-otp","service":"govsecure-service","timestamp":"2026-05-17 20:13:44"}
+{"level":"info","message":"GET /dashboard.html","service":"govsecure-service","timestamp":"2026-05-17 20:13:45"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-17 20:13:45"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-17 20:13:45"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-17 20:13:46"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-17 20:13:46"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-17 20:13:46"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-17 20:13:46"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-17 20:14:02"}
+{"level":"info","message":"GET /api/admin/stats","service":"govsecure-service","timestamp":"2026-05-17 20:14:04"}
+{"level":"info","message":"GET /api/admin/logs","service":"govsecure-service","timestamp":"2026-05-17 20:14:04"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-17 20:14:10"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-17 20:14:19"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-17 20:14:19"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-17 20:14:19"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-17 20:14:31"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-17 20:14:34"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-17 20:14:34"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-17 20:14:34"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-17 20:14:37"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-17 20:14:39"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-17 20:14:39"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-17 20:14:39"}
+{"level":"info","message":"GET /api/documents/15/download","service":"govsecure-service","timestamp":"2026-05-17 20:14:51"}
+{"level":"info","message":"GET /api/admin/stats","service":"govsecure-service","timestamp":"2026-05-17 20:15:02"}
+{"level":"info","message":"GET /api/admin/logs","service":"govsecure-service","timestamp":"2026-05-17 20:15:02"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-17 20:15:13"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-17 20:15:14"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-17 20:15:14"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-17 20:15:20"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-17 20:15:20"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-17 20:15:20"}
+{"level":"info","message":"GET /dashboard.html","service":"govsecure-service","timestamp":"2026-05-17 20:28:25"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-17 20:28:25"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-17 20:28:25"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-17 20:28:25"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-17 20:28:25"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-17 20:28:25"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-17 20:28:26"}
+{"level":"info","message":"GET /index.html","service":"govsecure-service","timestamp":"2026-05-17 20:28:27"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-17 20:28:27"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-17 20:28:27"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-17 20:28:28"}
+{"level":"info","message":"GET /verify.html","service":"govsecure-service","timestamp":"2026-05-17 20:28:51"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-17 20:28:51"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-17 20:28:51"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-17 20:28:51"}
+{"level":"info","message":"POST /api/documents/verify","service":"govsecure-service","timestamp":"2026-05-17 20:29:01"}
+{"level":"info","message":"GET /index.html","service":"govsecure-service","timestamp":"2026-05-17 20:29:18"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-17 20:29:18"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-17 20:29:18"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-17 20:29:19"}
+{"level":"info","message":"GET /","service":"govsecure-service","timestamp":"2026-05-17 20:31:39"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-17 20:31:39"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-17 20:31:39"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-17 20:31:40"}
+{"level":"info","message":"POST /api/auth/request-otp","service":"govsecure-service","timestamp":"2026-05-17 20:32:09"}
+{"level":"info","message":"POST /api/auth/verify-otp","service":"govsecure-service","timestamp":"2026-05-17 20:32:29"}
+{"level":"info","message":"GET /dashboard.html","service":"govsecure-service","timestamp":"2026-05-17 20:32:29"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-17 20:32:30"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-17 20:32:30"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-17 20:32:30"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-17 20:32:30"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-17 20:32:30"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-17 20:32:31"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-17 20:33:22"}
+{"level":"info","message":"GET /api/admin/stats","service":"govsecure-service","timestamp":"2026-05-17 20:33:25"}
+{"level":"info","message":"GET /api/admin/logs","service":"govsecure-service","timestamp":"2026-05-17 20:33:25"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-17 20:33:34"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-17 20:33:36"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-17 20:33:36"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-17 20:33:36"}
+{"level":"info","message":"GET /dashboard.html","service":"govsecure-service","timestamp":"2026-05-17 20:33:50"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-17 20:33:51"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-17 20:33:51"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-17 20:33:51"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-17 20:33:51"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-17 20:33:51"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-17 20:33:51"}
+{"level":"info","message":"GET /api/admin/stats","service":"govsecure-service","timestamp":"2026-05-17 20:35:18"}
+{"level":"info","message":"GET /api/admin/logs","service":"govsecure-service","timestamp":"2026-05-17 20:35:18"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-17 20:35:22"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-17 20:35:29"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-17 20:35:30"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-17 20:35:31"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-17 20:35:31"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-17 20:35:47"}
+{"level":"info","message":"GET /api/admin/stats","service":"govsecure-service","timestamp":"2026-05-17 20:35:50"}
+{"level":"info","message":"GET /api/admin/logs","service":"govsecure-service","timestamp":"2026-05-17 20:35:50"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-17 20:36:01"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-17 20:36:01"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-17 20:36:01"}
+{"level":"info","message":"POST /api/documents/upload","service":"govsecure-service","timestamp":"2026-05-17 20:40:35"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-17 20:40:36"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-17 20:40:36"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-17 20:40:36"}
+{"level":"info","message":"GET /api/documents/18/download","service":"govsecure-service","timestamp":"2026-05-17 20:40:39"}
+{"level":"info","message":"GET /index.html","service":"govsecure-service","timestamp":"2026-05-17 20:51:23"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-17 20:51:23"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-17 20:51:23"}
+{"level":"info","message":"GET /dashboard.html","service":"govsecure-service","timestamp":"2026-05-17 20:51:23"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-17 20:51:23"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-17 20:51:23"}
+{"level":"info","message":"GET /api/logs","service":"govsecure-service","timestamp":"2026-05-17 20:51:24"}
+{"level":"info","message":"GET /api/documents","service":"govsecure-service","timestamp":"2026-05-17 20:51:24"}
+{"level":"info","message":"GET /api/shares","service":"govsecure-service","timestamp":"2026-05-17 20:51:24"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-17 20:51:26"}
+{"level":"info","message":"GET /index.html","service":"govsecure-service","timestamp":"2026-05-17 20:51:31"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-17 20:51:31"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-17 20:51:31"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-17 20:51:31"}
+{"level":"info","message":"[GovSecure] Engine operational on port 3000","service":"govsecure-service","timestamp":"2026-05-18 07:30:51"}
+{"level":"info","message":"[GovSecure] Local Access: http://localhost:3000","service":"govsecure-service","timestamp":"2026-05-18 07:30:51"}
+{"level":"info","message":"GET /","service":"govsecure-service","timestamp":"2026-05-18 07:31:57"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-18 07:31:58"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-18 07:31:58"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-18 07:31:59"}
+{"level":"info","message":"GET /api","service":"govsecure-service","timestamp":"2026-05-18 07:32:12"}
+{"level":"info","message":"GET /css/style.css","service":"govsecure-service","timestamp":"2026-05-18 07:32:13"}
+{"level":"info","message":"GET /js/theme.js","service":"govsecure-service","timestamp":"2026-05-18 07:32:13"}
+{"level":"info","message":"GET /favicon.ico","service":"govsecure-service","timestamp":"2026-05-18 07:32:15"}
