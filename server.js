@@ -113,12 +113,8 @@ if (require.main === module) {
             });
         })
         .catch((err) => {
-<<<<<<< HEAD
             console.error('[GovSecure] Database initialization failed:', err);
             console.error('[GovSecure] Stack trace:', err.stack);
-=======
-            console.error('[GovSecure] Initialization failed:', err);
->>>>>>> d22442fc (Add new files: redisClient, updated configurations and routes for production deployment)
             process.exit(1);
         });
 }
