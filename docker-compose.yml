@@ -10,11 +10,23 @@ services:
       - PORT=3000
       - SKIP_EMAIL=true
       - DATABASE_PATH=/usr/src/app/data/database.sqlite
+      - REDIS_URL=redis://redis:6379
     volumes:
       - app_data:/usr/src/app/uploads
       - db_data:/usr/src/app/data
+    restart: unless-stopped
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
     restart: unless-stopped
 
 volumes:
   app_data:
   db_data:
+  redis_data:

@@ -191,14 +191,10 @@
                 <h2 style="margin-bottom: 12px; font-size: 1.75rem;">Link your Aadhaar</h2>
                 <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 32px;">To access the vault, we need to cryptographically verify your identity through UIDAI.</p>
 
-                <div class="method-selector">
-                    <div id="useEmailBtn" class="method-card active">
+                <div class="method-selector" style="display: flex; justify-content: center;">
+                    <div id="useEmailBtn" class="method-card active" style="width: 100%; max-width: 300px;">
                         <i class="fa-solid fa-envelope"></i>
-                        <span>Email OTP</span>
-                    </div>
-                    <div id="useSmsBtn" class="method-card">
-                        <i class="fa-solid fa-mobile-screen"></i>
-                        <span>SMS OTP</span>
+                        <span>Email OTP Verification</span>
                     </div>
                 </div>
 
@@ -294,19 +290,9 @@
         useEmailBtn.addEventListener('click', () => {
             verificationMethod = 'email';
             useEmailBtn.classList.add('active');
-            useSmsBtn.classList.remove('active');
             mobileField.style.display = 'none';
             mobileNumberInput.required = false;
             otpInfoText.textContent = 'Enter the security code sent to your email';
-        });
-
-        useSmsBtn.addEventListener('click', () => {
-            verificationMethod = 'sms';
-            useSmsBtn.classList.add('active');
-            useEmailBtn.classList.remove('active');
-            mobileField.style.display = 'block';
-            mobileNumberInput.required = true;
-            otpInfoText.textContent = 'Enter the security code sent to your mobile';
         });
 
         aadhaarForm.addEventListener('submit', async (e) => {

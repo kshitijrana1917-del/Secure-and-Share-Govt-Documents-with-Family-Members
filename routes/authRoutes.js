@@ -6,6 +6,7 @@ const { db, logAction } = require('../database');
 const { sendOTP, sendAadhaarOTP } = require('../utils/emailService');
 const { sendSMS } = require('../utils/messageService');
 const { authenticate } = require('../middleware/auth');
+const { redisClient } = require('../utils/redisClient');
 const rateLimit = require('express-rate-limit');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'super-secret-key-for-dev';
@@ -20,9 +21,7 @@ const authLimiter = rateLimit({
 });
 
 // In-memory store for OTPs. In production, use Redis or DB.
-const otpStore = new Map();
-const aadhaarOtpStore = new Map();
-const smsOtpStore = new Map();
+// OTPs are now stored in Redis cache
 
 // POST /api/auth/request-otp
 router.post('/request-otp', authLimiter, async (req, res) => {
@@ -31,31 +30,32 @@ router.post('/request-otp', authLimiter, async (req, res) => {
 
     // Generate a 6-digit OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    otpStore.set(email, { otp, name, expiresAt: Date.now() + 5 * 60 * 1000 }); // 5 mins expiry
+    await redisClient.setEx(`otp:${email}`, 300, JSON.stringify({ otp, name }));
 
     try {
         await sendOTP(email, otp, name);
         res.json({ message: 'OTP sent to your email successfully.' });
     } catch (err) {
         console.error("Failed to send email:", err.message);
-        otpStore.delete(email);
+        await redisClient.del(`otp:${email}`);
         res.status(500).json({ error: 'Failed to send OTP email. Make sure SMTP is configured.' });
     }
 });
 
 // POST /api/auth/verify-otp
-router.post('/verify-otp', authLimiter, (req, res) => {
+router.post('/verify-otp', authLimiter, async (req, res) => {
     const { email, otp } = req.body;
     if (!email || !otp) return res.status(400).json({ error: 'Email and OTP are required' });
 
-    const storedOtpData = otpStore.get(email);
+    const storedStr = await redisClient.get(`otp:${email}`);
+    const storedOtpData = storedStr ? JSON.parse(storedStr) : null;
     
     if (!storedOtpData) {
         return res.status(400).json({ error: 'No OTP requested or expired.' });
     }
 
-    if (Date.now() > storedOtpData.expiresAt) {
-        otpStore.delete(email);
+    if (false) { // Redis handles expiration
+        await redisClient.del(`otp:${email}`);
         return res.status(400).json({ error: 'OTP has expired.' });
     }
 
@@ -64,10 +64,10 @@ router.post('/verify-otp', authLimiter, (req, res) => {
     }
 
     // OTP matches, delete it
-    otpStore.delete(email);
+    await redisClient.del(`otp:${email}`);
 
     // Check if user exists, otherwise create
-    db.get(`SELECT * FROM users WHERE email = ?`, [email], (err, row) => {
+    db.get(`SELECT * FROM users WHERE email = ?`, [email], async (err, row) => {
         if (err) return res.status(500).json({ error: 'Database error' });
 
         if (row) {
@@ -75,7 +75,7 @@ router.post('/verify-otp', authLimiter, (req, res) => {
             if (row.mobile && row.mobile !== 'email_linked') {
                 // Trigger SMS OTP for 2FA
                 const smsOtp = Math.floor(100000 + Math.random() * 900000).toString();
-                smsOtpStore.set(row.email, { otp: smsOtp, userId: row.id, expiresAt: Date.now() + 5 * 60 * 1000 });
+                await redisClient.setEx(`smsOtp:${row.email}`, 300, JSON.stringify({ otp: smsOtp, userId: row.id }));
                 
                 // Using fire-and-forget for sendSMS to avoid blocking, but catching errors
                 sendSMS(row.mobile, `Your GovSecure 2FA login OTP is: ${smsOtp}. Do not share it.`).catch(err => console.error("2FA SMS Error:", err));
@@ -129,17 +129,18 @@ router.post('/verify-otp', authLimiter, (req, res) => {
 });
 
 // POST /api/auth/verify-2fa
-router.post('/verify-2fa', authLimiter, (req, res) => {
+router.post('/verify-2fa', authLimiter, async (req, res) => {
     const { email, otp } = req.body;
     if (!email || !otp) return res.status(400).json({ error: 'Email and OTP are required' });
 
-    const storedData = smsOtpStore.get(email);
+    const storedStr = await redisClient.get(`smsOtp:${email}`);
+    const storedData = storedStr ? JSON.parse(storedStr) : null;
     if (!storedData) {
         return res.status(400).json({ error: 'No 2FA OTP requested or expired.' });
     }
 
-    if (Date.now() > storedData.expiresAt) {
-        smsOtpStore.delete(email);
+    if (false) {
+        await redisClient.del(`smsOtp:${email}`);
         return res.status(400).json({ error: '2FA OTP has expired.' });
     }
 
@@ -147,7 +148,7 @@ router.post('/verify-2fa', authLimiter, (req, res) => {
         return res.status(400).json({ error: 'Invalid 2FA OTP.' });
     }
 
-    smsOtpStore.delete(email);
+    await redisClient.del(`smsOtp:${email}`);
 
     db.get(`SELECT * FROM users WHERE email = ?`, [email], (err, row) => {
         if (err || !row) return res.status(500).json({ error: 'Database error' });
@@ -187,14 +188,13 @@ router.post('/aadhaar/request-otp', authenticate, authLimiter, async (req, res) 
     const hash = crypto.createHash('sha256').update(aadhaarNumber).digest('hex');
     
     // Store OTP against user ID
-    aadhaarOtpStore.set(req.user.id, { 
+    await redisClient.setEx(`aadhaarOtp:${req.user.id}`, 300, JSON.stringify({ 
         otp, 
         last4,
         hash,
         mobile: method === 'sms' ? mobile : 'email_linked',
-        method,
-        expiresAt: Date.now() + 5 * 60 * 1000 
-    });
+        method
+    }));
 
     logAction(req.user.id, 'AADHAAR_OTP_REQUEST', `Aadhaar OTP requested via ${method} for ending with ${last4}`);
 
@@ -215,23 +215,24 @@ router.post('/aadhaar/request-otp', authenticate, authLimiter, async (req, res) 
         }
     } catch (err) {
         console.error(`${method.toUpperCase()} Error:`, err.message);
-        aadhaarOtpStore.delete(req.user.id);
+        await redisClient.del(`aadhaarOtp:${req.user.id}`);
         res.status(500).json({ error: `Failed to send OTP via ${method}. Please try the other method or check configuration.` });
     }
 });
 
 // POST /api/auth/aadhaar/verify-otp
-router.post('/aadhaar/verify-otp', authenticate, (req, res) => {
+router.post('/aadhaar/verify-otp', authenticate, async (req, res) => {
     const { otp } = req.body;
     const userId = req.user.id;
 
-    const storedData = aadhaarOtpStore.get(userId);
+    const storedStr = await redisClient.get(`aadhaarOtp:${userId}`);
+    const storedData = storedStr ? JSON.parse(storedStr) : null;
     if (!storedData) {
         return res.status(400).json({ error: 'No OTP request found or expired.' });
     }
 
-    if (Date.now() > storedData.expiresAt) {
-        aadhaarOtpStore.delete(userId);
+    if (false) {
+        await redisClient.del(`aadhaarOtp:${userId}`);
         return res.status(400).json({ error: 'OTP has expired.' });
     }
 
@@ -244,10 +245,10 @@ router.post('/aadhaar/verify-otp', authenticate, (req, res) => {
     db.run(
         `UPDATE users SET aadhaar_verified = 1, aadhaar_last4 = ?, aadhaar_hash = ?, verification_timestamp = ?, mobile = ? WHERE id = ?`,
         [storedData.last4, storedData.hash, timestamp, storedData.mobile, userId],
-        (err) => {
+        async (err) => {
             if (err) return res.status(500).json({ error: 'Database error' });
 
-            aadhaarOtpStore.delete(userId);
+            await redisClient.del(`aadhaarOtp:${userId}`);
             logAction(userId, 'AADHAAR_VERIFIED', `Aadhaar verified successfully (ending with ${storedData.last4}) via mobile ${storedData.mobile}`);
             
             res.json({ 
