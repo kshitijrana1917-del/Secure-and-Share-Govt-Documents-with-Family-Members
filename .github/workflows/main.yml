@@ -57,13 +57,7 @@ jobs:
         registry: ${{ env.REGISTRY }}
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
-      continue-on-error: true
-    
-    - name: Verify GHCR Connection
-      run: |
-        echo "Testing GHCR connection..."
-        docker run --rm hello-world >/dev/null 2>&1 && echo "GHCR connection successful" || echo "Warning: GHCR connection test skipped"
-    
+
     - name: Build and Push Docker Image
       uses: docker/build-push-action@v5
       with:
@@ -74,24 +68,7 @@ jobs:
           ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
-      continue-on-error: false
-      
-    - name: Verify Image Push
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-      run: |
-        echo "Verifying pushed images..."
-        REGISTRY="${{ env.REGISTRY }}"
-        IMAGE_NAME="${{ env.IMAGE_NAME }}"
-        TOKEN="${{ secrets.GITHUB_TOKEN }}"
-        
-        echo "Checking image tags at ${REGISTRY}/${IMAGE_NAME}"
-        
-        # List image manifests (requires authentication)
-        curl -s -H "Authorization: Bearer ${TOKEN}" \
-          -H "Accept: application/vnd.docker.distribution.manifest.v2+json" \
-          "${REGISTRY}/v2/${IMAGE_NAME}/manifests/latest" | head -c 100
-        
-        echo -e "\n✓ Image push verification completed"
+        platforms: linux/amd64
       
     - name: Test Docker Container Startup
       run: |
