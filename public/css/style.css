@@ -363,9 +363,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @keyframes blob-float {
-    0% { transform: translate(-15%, -15%) scale(1) rotate(0deg); }
-    50% { transform: translate(10%, 20%) scale(1.2) rotate(45deg); }
-    100% { transform: translate(25%, -10%) scale(0.9) rotate(90deg); }
+    0% { transform: translate(-12%, -12%) scale(1) rotate(0deg); }
+    33% { transform: translate(8%, 15%) scale(1.08) rotate(30deg); }
+    66% { transform: translate(18%, -8%) scale(0.95) rotate(60deg); }
+    100% { transform: translate(-12%, -12%) scale(1) rotate(0deg); }
 }
 
 @keyframes gradient-shift {
@@ -393,6 +394,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Spotlight Cursor Effect */
 .spotlight-card {
     position: relative;
+    overflow: hidden;
 }
 .spotlight-card::before {
     content: "";
@@ -400,13 +402,13 @@ h1, h2, h3, h4, h5, h6 {
     inset: -1px;
     background: radial-gradient(
         800px circle at var(--mouse-x) var(--mouse-y),
-        rgba(99, 102, 241, 0.15),
+        rgba(99, 102, 241, 0.18),
         transparent 40%
     );
     border-radius: inherit;
     z-index: -1;
     opacity: 0;
-    transition: opacity 0.5s ease;
+    transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1);
     pointer-events: none;
 }
 .spotlight-card:hover::before {
@@ -416,9 +418,48 @@ h1, h2, h3, h4, h5, h6 {
 [data-theme="light"] .spotlight-card::before {
     background: radial-gradient(
         800px circle at var(--mouse-x) var(--mouse-y),
-        rgba(99, 102, 241, 0.08),
+        rgba(99, 102, 241, 0.12),
         transparent 40%
     );
+}
+
+/* Subtle glow for primary buttons */
+.btn-modern-primary {
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.6s ease;
+}
+.btn-modern-primary:hover {
+    box-shadow: 0 0 30px -5px rgba(99, 102, 241, 0.45);
+    transform: translateY(-2px) scale(1.01);
+}
+
+[data-theme="light"] .btn-modern-primary:hover {
+    box-shadow: 0 0 30px -5px rgba(99, 102, 241, 0.35);
+}
+
+/* Better typography for hero sections */
+.hero-title {
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+/* Smooth scrollbar improvements */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--clr-primary), var(--clr-accent));
+    border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, var(--clr-primary-hover), var(--clr-accent));
+}
+
+/* Drag & Drop active state */
+.drop-area-active {
+    border-color: var(--clr-primary) !important;
+    background: rgba(99, 102, 241, 0.1) !important;
+    box-shadow: 0 0 20px var(--clr-primary-glow);
 }
 
 /* Icon Micro-Animations */
@@ -468,5 +509,20 @@ h1, h2, h3, h4, h5, h6 {
 .page-transition.fade-out {
     opacity: 0;
     transform: translateY(-10px);
+}
+
+@keyframes reveal {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-reveal {
+    animation: reveal 0.5s ease forwards;
 }
 

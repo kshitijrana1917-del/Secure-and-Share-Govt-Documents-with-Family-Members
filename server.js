@@ -47,11 +47,14 @@ app.get('/health', async (req, res) => {
     }
 });
 
-// Serve static frontend files
+// Serve static frontend files with optimized caching
 app.use(express.static(path.join(__dirname, 'public'), {
     setHeaders: (res, path) => {
         if (path.endsWith('.html')) {
             res.setHeader('Cache-Control', 'no-cache');
+        } else if (path.endsWith('.css') || path.endsWith('.js') || path.endsWith('.png') || path.endsWith('.jpg') || path.endsWith('.jpeg') || path.endsWith('.gif') || path.endsWith('.svg') || path.endsWith('.woff') || path.endsWith('.woff2')) {
+            // Cache static assets for 1 day
+            res.setHeader('Cache-Control', 'public, max-age=86400');
         }
     }
 }));
@@ -102,8 +105,16 @@ app.get(/.*/, (req, res) => {
 });
 
 if (require.main === module) {
-    Promise.all([dbInitPromise, connectRedis()])
-        .then(() => {
+    // Always wait for dbInitPromise first (database is critical)
+    dbInitPromise
+        .then(async () => {
+            // Try to connect to Redis but don't fail if it doesn't work
+            try {
+                await connectRedis();
+            } catch (redisErr) {
+                console.warn('[GovSecure] Redis connection failed (non-critical), using memory fallback:', redisErr.message);
+            }
+            // Start the server regardless of Redis status
             server.listen(PORT, '0.0.0.0', () => {
                 logger.info(`[GovSecure] Engine operational on port ${PORT}`);
                 logger.info(`[GovSecure] Local Access: http://localhost:${PORT}`);

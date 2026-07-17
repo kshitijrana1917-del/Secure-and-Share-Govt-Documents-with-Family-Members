@@ -1037,6 +1037,52 @@
             }
         };
 
+        // Drag and Drop handlers
+        const dropArea = document.getElementById('dropArea');
+        
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+            document.body.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, highlight, false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, unhighlight, false);
+        });
+        
+        function highlight(e) {
+            dropArea.classList.add('drop-area-active');
+        }
+        
+        function unhighlight(e) {
+            dropArea.classList.remove('drop-area-active');
+        }
+        
+        dropArea.addEventListener('drop', handleDrop, false);
+        
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            if (files.length) {
+                const fileInput = document.getElementById('fileInput');
+                // Create a new FileList to assign to fileInput
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(files[0]);
+                fileInput.files = dataTransfer.files;
+                // Trigger the fileInput change event
+                const event = new Event('change', { bubbles: true });
+                fileInput.dispatchEvent(event);
+            }
+        }
+
         document.getElementById('uploadForm').onsubmit = async (e) => {
             e.preventDefault();
             const file = document.getElementById('fileInput').files[0];
@@ -1208,6 +1254,37 @@
             await originalLoadDashboardData();
             renderActivityChart(ownedDocs, sharedWithMeDocs);
         };
+
+        // --- Konami Code Easter Egg ---
+        const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+        let konamiIndex = 0;
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === konamiCode[konamiIndex]) {
+                konamiIndex++;
+                if (konamiIndex === konamiCode.length) {
+                    // Trigger the Easter egg!
+                    document.body.style.animation = 'none';
+                    document.body.offsetHeight; // Trigger reflow
+                    document.body.style.animation = 'rainbow 1s linear infinite';
+                    const style = document.createElement('style');
+                    style.innerHTML = `
+                        @keyframes rainbow {
+                            0% { filter: hue-rotate(0deg); }
+                            100% { filter: hue-rotate(360deg); }
+                        }
+                    `;
+                    document.head.appendChild(style);
+                    setTimeout(() => {
+                        document.body.style.animation = '';
+                        document.head.removeChild(style);
+                    }, 5000);
+                    konamiIndex = 0;
+                }
+            } else {
+                konamiIndex = 0;
+            }
+        });
 
         loadDashboardData();
     </script>

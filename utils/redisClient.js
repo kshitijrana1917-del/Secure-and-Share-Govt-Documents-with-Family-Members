@@ -20,10 +20,16 @@ redisClient.on('connect', () => {
 const fallbackCache = new Map();
 let useFallback = false;
 
-// Connect to Redis on startup
+// Connect to Redis on startup with a timeout
 const connectRedis = async () => {
     try {
-        await redisClient.connect();
+        // Add a timeout to the Redis connect() call so it never hangs
+        const connectTimeout = 5000; // 5 seconds timeout
+        const connectPromise = redisClient.connect();
+        const timeoutPromise = new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('Redis connection timeout')), connectTimeout)
+        );
+        await Promise.race([connectPromise, timeoutPromise]);
     } catch (err) {
         console.warn('⚠️ [GovSecure] Failed to connect to Redis. Falling back to Memory Cache.', err.message);
         useFallback = true;

@@ -99,10 +99,17 @@
 
         @media (max-width: 992px) {
             .auth-layout { flex-direction: column; }
-            .hero-section { flex: none; padding: 40px 24px; border-right: none; border-bottom: 1px solid var(--border-vibrant); }
-            .hero-title { font-size: 2.5rem; }
-            .form-section { padding: 24px; }
-            .login-card { padding: 32px; max-width: 100%; }
+            .hero-section { flex: none; padding: 32px 20px; border-right: none; border-bottom: 1px solid var(--border-vibrant); }
+            .hero-title { font-size: 2.25rem; }
+            .hero-subtitle { font-size: 1rem; max-width: 100%; }
+            .form-section { padding: 20px; }
+            .login-card { padding: 28px; max-width: 100%; }
+        }
+        @media (max-width: 480px) {
+            .hero-section { padding: 24px 16px; }
+            .hero-title { font-size: 1.85rem; }
+            .login-card { padding: 24px 16px; }
+            .bento-grid { grid-template-columns: 1fr !important; }
         }
 
         /* Toast styling is in style.css, but we need specific positioning */
@@ -184,23 +191,23 @@
                 </div>
 
                 <!-- Phase 1: Request OTP -->
-                <form id="requestOtpForm">
+                <form id="requestOtpForm" aria-label="Request OTP Form">
                     <div class="input-group" style="margin-bottom: 24px;">
                         <label for="email">Work Email</label>
                         <div style="position: relative;">
-                            <i class="fa-solid fa-envelope" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
-                            <input type="email" id="email" class="input-modern" placeholder="name@gov.in" style="padding-left: 48px;" required autofocus>
+                            <i class="fa-solid fa-envelope" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);" aria-hidden="true"></i>
+                            <input type="email" id="email" class="input-modern" placeholder="name@gov.in" style="padding-left: 48px;" required autofocus aria-label="Email Address">
                         </div>
                     </div>
                     <div class="input-group" style="margin-bottom: 32px;">
                         <label for="name">Full Name (Optional)</label>
                         <div style="position: relative;">
-                            <i class="fa-regular fa-user" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
-                            <input type="text" id="name" class="input-modern" placeholder="e.g. A. Sharma" style="padding-left: 48px;">
+                            <i class="fa-regular fa-user" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);" aria-hidden="true"></i>
+                            <input type="text" id="name" class="input-modern" placeholder="e.g. A. Sharma" style="padding-left: 48px;" aria-label="Full Name">
                         </div>
                     </div>
-                    <button type="submit" class="btn-modern btn-modern-primary" style="width: 100%;">
-                        Initialize Session <i class="fa-solid fa-arrow-right"></i>
+                    <button type="submit" class="btn-modern btn-modern-primary" style="width: 100%;" aria-label="Request One Time Password">
+                        Initialize Session <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
                     </button>
                 </form>
 
@@ -450,6 +457,45 @@
                 card.style.setProperty('--mouse-x', `${x}px`);
                 card.style.setProperty('--mouse-y', `${y}px`);
             });
+        });
+        
+        // --- Prevent form reload ---
+        ['requestOtpForm', 'verifyOtpForm', 'verifySmsOtpForm'].forEach(formId => {
+            const form = document.getElementById(formId);
+            if (form) {
+                form.addEventListener('submit', e => e.preventDefault());
+            }
+        });
+
+        // --- Konami Code Easter Egg ---
+        const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+        let konamiIndex = 0;
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === konamiCode[konamiIndex]) {
+                konamiIndex++;
+                if (konamiIndex === konamiCode.length) {
+                    // Trigger the Easter egg!
+                    document.body.style.animation = 'none';
+                    document.body.offsetHeight; // Trigger reflow
+                    document.body.style.animation = 'rainbow 1s linear infinite';
+                    const style = document.createElement('style');
+                    style.innerHTML = `
+                        @keyframes rainbow {
+                            0% { filter: hue-rotate(0deg); }
+                            100% { filter: hue-rotate(360deg); }
+                        }
+                    `;
+                    document.head.appendChild(style);
+                    setTimeout(() => {
+                        document.body.style.animation = '';
+                        document.head.removeChild(style);
+                    }, 5000);
+                    konamiIndex = 0;
+                }
+            } else {
+                konamiIndex = 0;
+            }
         });
     </script>
 </body>

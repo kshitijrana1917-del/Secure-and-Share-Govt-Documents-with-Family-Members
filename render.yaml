@@ -8,6 +8,16 @@ services:
     dockerfilePath: ./Dockerfile
     dockerContext: .
     healthCheckPath: /health
+    # Auto-deploy on push to main
+    autoDeploy: true
+    # Increase timeout to give server enough time to start
+    healthCheck:
+      path: /health
+      interval: 10
+      timeout: 5
+      unhealthyThreshold: 5
+      healthyThreshold: 2
+      initialDelay: 30
     envVars:
       - key: NODE_ENV
         value: production
