@@ -3,13 +3,16 @@ FROM node:18-bullseye-slim
 WORKDIR /usr/src/app
 
 # Native build tools + curl for health checks
-RUN apt-get update && apt-get install -y python3 make g++ curl && rm -rf /var/lib/apt/lists/*
+# Add libsqlite3-dev and pkg-config so sqlite3 can be built from source inside the image
+RUN apt-get update && apt-get install -y python3 make g++ libsqlite3-dev pkg-config curl && rm -rf /var/lib/apt/lists/*
 
 # Copy package files first
 COPY package*.json ./
 
-# Install dependencies with prebuilt sqlite3 binaries (much faster than --build-from-source)
+# Force native modules to be built from source (avoids incompatible prebuilt binaries requiring newer GLIBC)
+ENV npm_config_build_from_source=true
 RUN npm ci --omit=dev
+ENV npm_config_build_from_source=false
 
 # Copy source files
 COPY . .
