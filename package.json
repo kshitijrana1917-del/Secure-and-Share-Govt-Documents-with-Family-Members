@@ -1,8 +1,8 @@
 {
   "name": "govt-secured-documents",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Secure Government Document Storage & Sharing Platform",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "test": "jest --detectOpenHandles --forceExit"

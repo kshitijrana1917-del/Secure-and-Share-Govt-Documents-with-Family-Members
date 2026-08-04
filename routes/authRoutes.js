@@ -25,29 +25,55 @@ const authLimiter = rateLimit({
 
 // POST /api/auth/request-otp
 router.post('/request-otp', authLimiter, async (req, res) => {
-    const { email, name } = req.body;
-    if (!email) return res.status(400).json({ error: 'Email is required' });
+    const { email, phone, name, type } = req.body;
 
-    // Generate a 6-digit OTP
+    let inferredType = type;
+    if (!inferredType) {
+        if (email) inferredType = 'email';
+        else if (phone) inferredType = 'phone';
+    }
+
+    let contactValue;
+    let otpKey;
+
+    if (inferredType === 'email') {
+        if (!email) return res.status(400).json({ error: 'Email is required' });
+        contactValue = email;
+        otpKey = `otp:email:${email}`;
+    } else if (inferredType === 'phone') {
+        if (!phone) return res.status(400).json({ error: 'Phone is required' });
+        contactValue = phone;
+        otpKey = `otp:phone:${phone}`;
+    } else {
+        return res.status(400).json({ error: 'Invalid type: provide email or phone' });
+    }
+
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    await redisClient.setEx(`otp:${email}`, 300, JSON.stringify({ otp, name }));
+    await redisClient.setEx(otpKey, 300, JSON.stringify({ otp, name, type: inferredType, contact: contactValue }));
 
     try {
-        await sendOTP(email, otp, name);
-        res.json({ message: 'OTP sent to your email successfully.' });
+        if (inferredType === 'email') {
+            await sendOTP(email, otp, name);
+            res.json({ message: 'OTP sent to your email successfully.' });
+        } else {
+            await sendSMS(phone, `Your GovSecure login OTP is: ${otp}. Do not share it.`);
+            res.json({ message: 'OTP sent to your phone successfully.' });
+        }
     } catch (err) {
-        console.error("Failed to send email:", err.message);
-        await redisClient.del(`otp:${email}`);
-        res.status(500).json({ error: 'Failed to send OTP email. Make sure SMTP is configured.' });
+        console.error("Failed to send:", err.message);
+        await redisClient.del(otpKey);
+        res.status(500).json({ error: 'Failed to send OTP. Make sure your service is configured.' });
     }
 });
 
 // POST /api/auth/verify-otp
 router.post('/verify-otp', authLimiter, async (req, res) => {
-    const { email, otp } = req.body;
-    if (!email || !otp) return res.status(400).json({ error: 'Email and OTP are required' });
+    const { email, phone, otp } = req.body;
+    const contactKey = email ? `otp:email:${email}` : (phone ? `otp:phone:${phone}` : null);
 
-    const storedStr = await redisClient.get(`otp:${email}`);
+    if (!contactKey || !otp) return res.status(400).json({ error: 'Email/Phone and OTP are required' });
+
+    const storedStr = await redisClient.get(contactKey);
     const storedOtpData = storedStr ? JSON.parse(storedStr) : null;
     
     if (!storedOtpData) {
@@ -55,7 +81,7 @@ router.post('/verify-otp', authLimiter, async (req, res) => {
     }
 
     if (false) { // Redis handles expiration
-        await redisClient.del(`otp:${email}`);
+        await redisClient.del(contactKey);
         return res.status(400).json({ error: 'OTP has expired.' });
     }
 
@@ -64,10 +90,13 @@ router.post('/verify-otp', authLimiter, async (req, res) => {
     }
 
     // OTP matches, delete it
-    await redisClient.del(`otp:${email}`);
+    await redisClient.del(contactKey);
+
+    // Determine the user's email for database lookup
+    const userEmail = email || storedOtpData.contact;
 
     // Check if user exists, otherwise create
-    db.get(`SELECT * FROM users WHERE email = ?`, [email], async (err, row) => {
+    db.get(`SELECT * FROM users WHERE email = ?`, [userEmail], async (err, row) => {
         if (err) return res.status(500).json({ error: 'Database error' });
 
         if (row) {
@@ -104,12 +133,12 @@ router.post('/verify-otp', authLimiter, async (req, res) => {
             }
         } else {
             // New user, insert then generate token
-            const name = storedOtpData.name || email.split('@')[0];
-            db.run(`INSERT INTO users (email, name, role) VALUES (?, ?, 'citizen')`, [email, name], function(err) {
+            const name = storedOtpData.name || userEmail.split('@')[0] || 'User';
+            db.run(`INSERT INTO users (email, name, role) VALUES (?, ?, 'citizen')`, [userEmail, name], function(err) {
                 if (err) return res.status(500).json({ error: 'Error creating user' });
                 
                 const userId = this.lastID;
-                const token = jwt.sign({ id: userId, email: email, role: 'citizen' }, JWT_SECRET, { expiresIn: '24h' });
+                const token = jwt.sign({ id: userId, email: userEmail, role: 'citizen' }, JWT_SECRET, { expiresIn: '24h' });
                 logAction(userId, 'REGISTER', 'New user registered.');
                 logAction(userId, 'LOGIN', 'User logged in after registration.');
                 return res.json({ 
@@ -118,7 +147,7 @@ router.post('/verify-otp', authLimiter, async (req, res) => {
                     user: { 
                         id: userId, 
                         name: name, 
-                        email: email,
+                        email: userEmail,
                         role: 'citizen',
                         aadhaar_verified: false
                     } 

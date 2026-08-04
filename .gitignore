@@ -5,3 +5,8 @@ data/
 uploads/
 .DS_Store
 *.log
+logs/
+test_*.pdf
+test_*.txt
+test-watermark.pdf
+.vscode/

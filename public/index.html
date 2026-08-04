@@ -193,10 +193,28 @@
                 <!-- Phase 1: Request OTP -->
                 <form id="requestOtpForm" aria-label="Request OTP Form">
                     <div class="input-group" style="margin-bottom: 24px;">
-                        <label for="email">Work Email</label>
+                        <label for="contactMethod">Contact Method</label>
+                        <div style="display: flex; gap: 12px; margin-bottom: 12px;">
+                            <button type="button" id="emailBtn" class="btn-modern btn-modern-primary" style="flex:1;">
+                                <i class="fa-solid fa-envelope"></i> Email
+                            </button>
+                            <button type="button" id="phoneBtn" class="btn-modern btn-modern-outline" style="flex:1;">
+                                <i class="fa-solid fa-mobile-screen"></i> Phone
+                            </button>
+                        </div>
+                    </div>
+                    <div class="input-group" id="emailInputGroup" style="margin-bottom: 24px;">
+                        <label for="email">Email Address</label>
                         <div style="position: relative;">
                             <i class="fa-solid fa-envelope" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);" aria-hidden="true"></i>
                             <input type="email" id="email" class="input-modern" placeholder="name@gov.in" style="padding-left: 48px;" required autofocus aria-label="Email Address">
+                        </div>
+                    </div>
+                    <div class="input-group" id="phoneInputGroup" style="margin-bottom: 24px; display: none;">
+                        <label for="phone">Phone Number</label>
+                        <div style="position: relative;">
+                            <i class="fa-solid fa-mobile-screen" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);" aria-hidden="true"></i>
+                            <input type="tel" id="phone" class="input-modern" placeholder="+91 98765 43210" style="padding-left: 48px;" aria-label="Phone Number">
                         </div>
                     </div>
                     <div class="input-group" style="margin-bottom: 32px;">
@@ -215,7 +233,7 @@
                 <form id="verifyOtpForm" style="display: none;">
                     <div class="glass-card" style="padding: 16px; margin-bottom: 24px; border-radius: var(--radius-md); background: rgba(0,0,0,0.2);">
                         <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 4px;">Authorization code sent to</p>
-                        <span id="displayEmail" style="font-weight: 600; font-size: 0.95rem;"></span>
+                        <span id="displayContact" style="font-weight: 600; font-size: 0.95rem;"></span>
                     </div>
                     
                     <div class="input-group" style="margin-bottom: 32px;">
@@ -227,7 +245,7 @@
                         Verify Identity
                     </button>
                     <button type="button" id="backBtn" class="btn-modern btn-modern-ghost" style="width: 100%;">
-                        <i class="fa-solid fa-arrow-left"></i> Modify Email
+                        <i class="fa-solid fa-arrow-left"></i> Modify Details
                     </button>
                 </form>
 
@@ -271,18 +289,25 @@
         const verifyOtpForm = document.getElementById('verifyOtpForm');
         const verifySmsOtpForm = document.getElementById('verifySmsOtpForm');
         const emailInput = document.getElementById('email');
+        const phoneInput = document.getElementById('phone');
         const nameInput = document.getElementById('name');
         const otpInput = document.getElementById('otp');
         const smsOtpInput = document.getElementById('smsOtp');
         const backBtn = document.getElementById('backBtn');
-        const displayEmail = document.getElementById('displayEmail');
+        const displayContact = document.getElementById('displayContact');
         const displayMobile = document.getElementById('displayMobile');
+        const emailBtn = document.getElementById('emailBtn');
+        const phoneBtn = document.getElementById('phoneBtn');
+        const emailInputGroup = document.getElementById('emailInputGroup');
+        const phoneInputGroup = document.getElementById('phoneInputGroup');
         const toast = document.getElementById('toast');
         const toastMsg = document.getElementById('toastMsg');
         const toastIcon = document.getElementById('toastIcon');
         const dot1 = document.getElementById('dot1');
         const dot2 = document.getElementById('dot2');
         const dot3 = document.getElementById('dot3');
+        
+        let selectedContactType = 'email';
 
         // Check if already logged in
         if (localStorage.getItem('token')) {
@@ -308,6 +333,22 @@
             }, 4000);
         }
 
+        // Toggle contact method selection
+        emailBtn.addEventListener('click', () => {
+            selectedContactType = 'email';
+            emailBtn.className = 'btn-modern btn-modern-primary';
+            phoneBtn.className = 'btn-modern btn-modern-outline';
+            emailInputGroup.style.display = 'block';
+            phoneInputGroup.style.display = 'none';
+        });
+        phoneBtn.addEventListener('click', () => {
+            selectedContactType = 'phone';
+            phoneBtn.className = 'btn-modern btn-modern-primary';
+            emailBtn.className = 'btn-modern btn-modern-outline';
+            phoneInputGroup.style.display = 'block';
+            emailInputGroup.style.display = 'none';
+        });
+
         requestOtpForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const submitBtn = e.target.querySelector('button[type="submit"]');
@@ -316,16 +357,29 @@
             submitBtn.disabled = true;
 
             try {
+                const payload = { 
+                    name: nameInput.value.trim(),
+                    type: selectedContactType
+                };
+                let contactValue;
+                if (selectedContactType === 'email') {
+                    contactValue = emailInput.value.trim();
+                    payload.email = contactValue;
+                } else {
+                    contactValue = phoneInput.value.trim();
+                    payload.phone = contactValue;
+                }
+                
                 const res = await fetch('/api/auth/request-otp', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: emailInput.value.trim(), name: nameInput.value.trim() })
+                    body: JSON.stringify(payload)
                 });
                 const data = await res.json();
                 
                 if (res.ok) {
                     showToast(data.message);
-                    displayEmail.textContent = emailInput.value.trim();
+                    displayContact.textContent = contactValue;
                     requestOtpForm.style.display = 'none';
                     verifyOtpForm.style.display = 'block';
                     dot1.classList.remove('active');
@@ -351,10 +405,23 @@
             submitBtn.disabled = true;
 
             try {
+                const payload = {
+                    otp: otpInput.value.trim(),
+                    type: selectedContactType
+                };
+                let contactValue;
+                if (selectedContactType === 'email') {
+                    contactValue = emailInput.value.trim();
+                    payload.email = contactValue;
+                } else {
+                    contactValue = phoneInput.value.trim();
+                    payload.phone = contactValue;
+                }
+                
                 const res = await fetch('/api/auth/verify-otp', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: emailInput.value.trim(), otp: otpInput.value.trim() })
+                    body: JSON.stringify(payload)
                 });
                 const data = await res.json();
                 
